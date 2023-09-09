@@ -12,6 +12,7 @@ namespace Login
     {
         static void Main(string[] args)
         {
+            //AttachDbFilename thay bằng đường dẫn được lưu ở máy bạn để có thể hoạt động được
             string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\84967\source\repos\thanhlamcode\DangNhap\DangNhap\Project_DB.mdf;Integrated Security=True";
 
             using (var connection = new SqlConnection(connectionString))
@@ -28,6 +29,7 @@ namespace Login
                 {
                     int choose2 = Rogin.Nhap_Vao(1, 5);
                     Admin.Loc_Rac(connection, choose2);
+                    // Vai trò Admin tiếp tục trong if này
                 }    
 
                 connection.Close();
