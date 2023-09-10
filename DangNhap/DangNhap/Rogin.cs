@@ -16,8 +16,6 @@ namespace DangNhap
             {
                 case 1://Login
                     accessauthority = Login(connection);
-
-                    // Từ đoạn code sau là Phần Admin và User
                     Console.WriteLine($"Authority is {accessauthority}");
                     break;
 
@@ -61,7 +59,7 @@ namespace DangNhap
             int n;
             while (true)
             {
-                Console.Write($"Enter the number between {a} and {b}: ");
+                Console.Write($"Enter the number ({a} -> {b}): ");
                 if (int.TryParse(Console.ReadLine(), out n) && Dieukien(a, b, n))
                 {
                     break;
@@ -84,7 +82,8 @@ namespace DangNhap
         public static char Login(SqlConnection connection)
         {
             char accessauthority = ' ';
-            using (var command = new SqlCommand("SELECT username, password, accessright FROM Account", connection))
+            string query = "SELECT username, password, accessright FROM Account";
+            using (var command = new SqlCommand(query, connection))
             {
                 try
                 {
@@ -99,7 +98,7 @@ namespace DangNhap
                         var sqlreader = command.ExecuteReader();
 
                         // Đọc từng dòng data và lấy nó ra, kiểm tra với tk1,ps1 vừa nhập vào cho đến khi
-                        // sqlreader.Read() trả về false -> Tức là dòng qua dòng data cuối.
+                        // sqlreader.Read() trả về false -> Tức là đi qua dòng data cuối.
                         while (sqlreader.Read())
                         {
                             var tk2 = sqlreader.GetString(0);
@@ -145,7 +144,8 @@ namespace DangNhap
             int num = 0;
             // Truy vấn chỉ muốn lấy ra 1 dòng kết quả  (TOP 1) từ cột accountId từ bảng Account theo thứ tự accountId giảm dần
             // Lấy giá trị đầu tiên sau khi sắp xếp
-            using (var command = new SqlCommand("SELECT TOP 1 accountId FROM Account ORDER BY accountId DESC", connection))
+            string query = "SELECT TOP 1 accountId FROM Account ORDER BY accountId DESC";
+            using (var command = new SqlCommand(query, connection))
             {
                 var sqlreader = command.ExecuteReader();
                 while (sqlreader.Read())
@@ -189,8 +189,10 @@ namespace DangNhap
         {
             // Chèn giá trị mới vào các cột bằng các tham số truyền vào như
             // @id, @tk, @mk,...
-            using (var command = new SqlCommand("insert into Account (accountId, username, password, logintime, reporttime, commenttime, accessright) " +
-                "values (@id, @tk, @mk, @lgt, @rt, @ct, @ar)", connection))
+            string query = "insert into Account (accountId, username, password, logintime, reporttime, commenttime, accessright) " +
+                "values (@id, @tk, @mk, @lgt, @rt, @ct, @ar)";
+
+            using (var command = new SqlCommand(query, connection))
             {
                 try
                 {
