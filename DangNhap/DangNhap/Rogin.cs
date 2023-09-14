@@ -122,8 +122,7 @@ namespace DangNhap
                     command.Parameters.AddWithValue("@id", number);
 
                     //kiểm tra xem username có trùng không
-                    var userten = command.Parameters.AddWithValue("@tk",
-                        Nhap_Vao<string>("Username: ", s => string.IsNullOrEmpty(s), s => IsEmptyNumber_Namesake(connection, 0, s)));
+                    var userten = command.Parameters.AddWithValue("@tk", Check_Name(connection));
 
                     Console.Write("Password: ");
                     command.Parameters.AddWithValue("@mk", Console.ReadLine());
@@ -141,65 +140,27 @@ namespace DangNhap
 
             }
         }
-        // T Nhap_Vao <T> Nhap_Vao<T>: T phía trước: giá trị generic cho phép làm việc với kiểu data xác định ngay thời điểm biên dịch
-        // T phía sau: giá trị trả về của tham số
-
-        // Func<T, bool> dieukien : Hàm delegate trả về giá trị bool.
-
-        // bool> Name_Same = null : tham số có giá trị mặc định là null, có nghĩa rằng ko cần kiểm tra điều kiện trong tham số
-        // này nếu không muốn.
-
-        // T result = (T)Convert.ChangeType(input, typeof(T)); -> Ép kiểu hai lần do C.C lần đầu trả về kiểu object.
-        // bên trong đổi giá trị kiểu data của input sang typeof(T)
-        public static T Nhap_Vao<T>(string text, Func<T, bool> dieukien, Func<T, bool> Name_Same = null)
-        {
-            T result;
-            bool convert1 = false;
+        public static int Nhap_Vao(int a, int b, string c = null)
+        {     
+            int n;
             while (true)
             {
-                Console.Write(text);
-                string input = Console.ReadLine();
-                try
+                Console.WriteLine(c);
+                Console.Write($"Nhập số ({a} -> {b}): ");
+                if (int.TryParse(Console.ReadLine(), out n) && (n >= a && n <= b))
                 {
-                    try
-                    {
-                        // Thử check kiểu nếu lỗi, không thể chuyển thì sẽ mặc định false.
-                        // result = default(T); : đảm bảo luôn có một giá trị hợp lệ khi ép kiểu ko thành công
-                        result = (T)Convert.ChangeType(input, typeof(T));
-                        convert1 = true;
-                    }
-                    catch 
-                    {
-                        result = default(T);
-                    }
-                    // Kiểm tra TH nếu nhập vào username: KT phần Func dieukien -> Nếu trống thì nhảy vào.
-                    // Bên trong kiểm tra nếu tham số 3 không để trống và Kiểm tra điều kiện trong Func Name_Same
-                    // liệu tên có trùng không. Nếu có suy ra else không thì trả về giá trị result.
-
-                    // Kiểm tra TH nếu nhập vào số: KT phần Func dieukien -> Nếu thỏa trong khoảng đó thì nhảy vào
-                    // Kiểm tra liệu tham số 3 có null không nếu null nhảy vào không thì xét tiếp
-                    if (convert1 && dieukien(result))
-                    {
-                        if (Name_Same == null || (Name_Same != null && Name_Same(result)))
-                        {
-                            Console.Clear();
-                            return result;
-                        }
-                        else Console.WriteLine("Giá trị bạn nhập đã tồn tại. Vui lòng thử tên khác.");
-
-                    }
-                    else 
-                    {
-                        Console.Clear();
-                        Console.WriteLine("Giá trị không hợp lệ. Vui lòng thử lại."); 
-                    }
+                    Console.Clear();
+                    break;
                 }
-                catch (Exception e)
+                else
                 {
-                    Console.WriteLine($"Error Nhap_Vao: {e}");
+                    Console.Clear();
+                    Console.WriteLine("Giá trị không hợp lệ. Vui lòng trở lại.");
                 }
-            }
+}
+            return n;
         }
+
         public static int Biggest_id(SqlConnection connection)
         {
             int num = 0;
@@ -243,6 +204,25 @@ namespace DangNhap
 
                 return count == 0;
             }
-        }   
+        }
+
+        public static string Check_Name(SqlConnection connection)
+        {
+            // Function này dùng nhằm kiểm tra xem username có bị trùng không, nếu trùng thì bắt nhập lại
+            string num = " ";
+            while (true)
+            {
+                Console.Write("Username: ");
+                num = Console.ReadLine();
+                if (IsEmptyNumber_Namesake(connection, 0, num))
+                {
+                    return num;
+                }
+                else
+                {
+                    Console.WriteLine("Tên đã tồn tại. Vui lòng bạn chọn lại tên khác.");
+                }
+            }
+        }
     }
 }

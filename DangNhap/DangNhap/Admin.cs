@@ -22,26 +22,26 @@ namespace DangNhap
                         case 1:
                             command.CommandText = "DELETE FROM Account WHERE logintime <= @lgt " +
                     "AND accessright = 0";
-                            command.Parameters.AddWithValue("@lgt", 
-                                Rogin.Nhap_Vao<int>("Enter the number (1 -> 999): ", n => n >= 1 && n <= 999));
+                            command.Parameters.AddWithValue("@lgt", Rogin.Nhap_Vao(1, 999));
+                            Console.WriteLine("Đã xóa thành công.");
                             break;
                         case 2:
                             command.CommandText = "DELETE FROM Account WHERE reportntime >= @rt " +
                     "AND accessright = 0";
-                            command.Parameters.AddWithValue("@rt", 
-                                Rogin.Nhap_Vao<int>("Enter the number (1 -> 999): ", n => n >= 1 && n <= 999));
+                            command.Parameters.AddWithValue("@rt", Rogin.Nhap_Vao(1, 999));
+                            Console.WriteLine("Đã xóa thành công.");
                             break;
                         case 3:
                             command.CommandText = "DELETE FROM Account WHERE commenttime <= @ct " +
                     "AND accessright = 0";
-                            command.Parameters.AddWithValue("@ct", 
-                                Rogin.Nhap_Vao<int>("Enter the number (1 -> 999): ", n => n >= 1 && n <= 999));
+                            command.Parameters.AddWithValue("@ct", Rogin.Nhap_Vao(1, 999));
+                            Console.WriteLine("Đã xóa thành công.");
                             break;
                         case 4:
                             command.CommandText = "DELETE FROM Account WHERE accountId = @id " +
                     "AND accessright = 0";
-                            command.Parameters.AddWithValue("@id", 
-                                Rogin.Nhap_Vao<int>("Enter the number (100 -> 999): ", n => n >= 100 && n <= 999));
+                            command.Parameters.AddWithValue("@id", Rogin.Nhap_Vao(100, 999));
+                            Console.WriteLine("Đã xóa thành công.");
                             break;
                         case 5://Exit
                             Console.WriteLine("Thanks for using our application!");
