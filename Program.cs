@@ -1,105 +1,70 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Linq;
+using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace user
+namespace _2
 {
     internal class Program
     {
-        static void addReview(SqlConnection connection)
+        static void Main(string[] args)
         {
-            Console.WriteLine("Thêm reiview:");
-
-            Console.Write("Viết bình luận của bạn: ");
-            string comment = Console.ReadLine();
-
-            double rating;
-            while (true)
             {
-                Console.Write("Số điểm Rating của bạn: ");
-                if (double.TryParse(Console.ReadLine(), out rating) && rating >= 0 && rating <= 10)
-                    break;
-                else
-                    Console.WriteLine("Không hợp lệ. Vui lòng cho điểm lại trên thang từ 0 đến 10");
-            }
+                Console.OutputEncoding = Encoding.UTF8;
+                Console.InputEncoding= Encoding.UTF8;
 
-            string updateQuery = "UPDATE COMMENT " +
-                             "SET comment = @comment" +
-                             "rating = @rating" +
-                             "WHERE review = @review";
-
-            using (SqlCommand updateCommand = new SqlCommand(updateQuery, connection))
-            {
-                updateCommand.Parameters.AddWithValue("@comment", comment);
-                updateCommand.Parameters.AddWithValue("@rating", rating);
-
-                int rowsAffected = updateCommand.ExecuteNonQuery();
-
-                if (rowsAffected > 0)
+                // Chuỗi kết nối tới cơ sở dữ liệu
+                string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\HP\source\repos\thanhlamcode\DangNhap\DangNhap\Project_DB.mdf;Integrated Security=True";
+                using (var connection = new SqlConnection(connectionString))
+                    
+                try
                 {
-                    Console.WriteLine("Dữ liệu đã được cập nhật thành công.");
-                }
-                else
-                {
-                    Console.WriteLine("Không có bản ghi nào được cập nhật.");
-                }
-            }
-        }
-
-        static void viewAllReview(SqlConnection connection)
-        {
-            string query = "SELECT commnet, rating FROM REVIEW";
-
-            using (SqlCommand command = new SqlCommand(query, connection))
-            {
-                SqlDataReader reader = command.ExecuteReader();
-
-                Console.WriteLine("Danh sách tất cả các review:");
-
-                while (reader.Read())
-                {
-                    string comment = reader["comment"].ToString();
-                    double rating = (double)reader["rating"];
-                    Console.WriteLine($"Comment: {comment}, rating: {rating}");
-                }
-
-                reader.Close();
-            }
-        }
-        
-        private static string connectionString;
-        static void Main()
-        {
-            Console.OutputEncoding = Encoding.UTF8;
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                while (true)
-                {
-                    Console.WriteLine("1. Thêm hoặc sửa review");
-                    Console.WriteLine("2. Xem tất cả review");
-                    Console.Write("Chọn tùy chọn 1, 2: ");
-
-                    int choice;
-                    if (int.TryParse(Console.ReadLine(), out choice))
                     {
-                        switch (choice)
+                        connection.Open();
+
+                            // ID của phim cần xem thông tin chi tiết
+                            int filmId = 1;
+
+                            // Truy vấn thông tin chi tiết về phim từ cơ sở dữ liệu
+                            string query = "SELECT Title, Rank, Rating, Summary FROM Films WHERE FilmId = @FilmId";
+                        SqlCommand command = new SqlCommand(query, connection);
+                        command.Parameters.AddWithValue("@FilmId", filmId);
+
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
-                            case 1:
-                                addReview(connection);
-                                break;
-                            case 2:
-                                viewAllReview(connection);
-                                break;
-                            default:
-                                Console.WriteLine("Không hợp lệ. Vui lòng chọn lại");
-                                break;
+                            if (reader.Read())
+                            {
+                                // Lấy thông tin từ dữ liệu trả về
+                                string title = reader.GetString(0);
+                                int rank = reader.GetInt32(1);
+                                double rating = reader.GetDouble(2);
+                                string summary = reader.GetString(3);
+
+                                // Hiển thị thông tin chi tiết về phim
+                                Console.WriteLine("Title: " + title);
+                                Console.WriteLine("Rank: " + rank);
+                                Console.WriteLine("Rating: " + rating);
+                                Console.WriteLine("Summary: " + summary);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Phim không tồn tại.");
+                            }
+
                         }
+                            connection.Close();
                     }
-                    else Console.WriteLine("Không hợp lệ. Vui lòng chọn lại");
                 }
-            }   
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Lỗi: " + ex.Message);
+                }
+            }
         }
     }
 }
