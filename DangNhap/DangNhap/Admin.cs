@@ -12,7 +12,7 @@ namespace DangNhap
     {
         public static void Loc_Rac(SqlConnection connection, int num)
         {
-            // dùng gán với hàm Nhap_Vao
+            // dùng chung với hàm Nhap_Vao
             using(var command = new SqlCommand())
             {
                 command.Connection = connection; 

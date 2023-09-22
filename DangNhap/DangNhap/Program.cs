@@ -15,7 +15,7 @@ namespace Login
         {
             Console.InputEncoding = Encoding.Unicode;
             Console.OutputEncoding = Encoding.Unicode;
-            //AttachDbFilename thay bằng đường dẫn được lưu ở máy bạn để có thể hoạt động được
+            //AttachDbFilename thay bằng đường dẫn được lưu ở máy mọi người để có thể hoạt động được
             string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\84967\source\repos\thanhlamcode\DangNhap\DangNhap\Project_DB.mdf;Integrated Security=True";
 
             using (var connection = new SqlConnection(connectionString))
