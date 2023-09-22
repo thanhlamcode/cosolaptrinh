@@ -9,14 +9,15 @@ namespace DangNhap
 {
     internal class Rogin
     {
-        public static void First_Move(SqlConnection connection, ref char accessauthority, int choose1)
+        public static void First_Move(SqlConnection connection, ref char accessauthority, ref string accountname, ref int id_user, int choose1)
         {
             // Giao diện đăng nhập
             switch (choose1)
             {
                 case 1://Login
-                    accessauthority = Login(connection);
+                    accessauthority = Login(connection, ref accountname, ref id_user);
                     Console.WriteLine($"Authority is {accessauthority}");
+                    Console.WriteLine($"Username: {accountname} - ID: {id_user}\n\n");
                     break;
 
                 case 2: //Register
@@ -28,10 +29,10 @@ namespace DangNhap
                     return;
             }
         }
-        public static char Login(SqlConnection connection)
+        public static char Login(SqlConnection connection, ref string accountname, ref int id_user)
         {
             char accessauthority = ' ';
-            string query = "SELECT username, password, accessright FROM Account";
+            string query = "SELECT accountId, username, password, accessright FROM Account";
             using (var command = new SqlCommand(query, connection))
             {
                 try
@@ -50,14 +51,16 @@ namespace DangNhap
                         // sqlreader.Read() trả về false -> Tức là đi qua dòng data cuối.
                         while (sqlreader.Read())
                         {
-                            var tk2 = sqlreader.GetString(0);
-                            var ps2 = sqlreader.GetString(1);
-                            var ar = sqlreader.GetBoolean(2);
+                            var tk2 = sqlreader.GetString(1);
+                            var ps2 = sqlreader.GetString(2);
+                            var ar = sqlreader.GetBoolean(3);
 
                             if (tk1 == tk2 && ps1 == ps2)
                             {
                                 // Để xác định vai trò Admin hay User và dừng vòng lặp trong khi
                                 // đã kiểm tra đúng TK và MK
+                                accountname = tk1;
+                                id_user = sqlreader.GetInt32(0);
                                 accessauthority = ar ? 'A' : 'U';
                             }
 

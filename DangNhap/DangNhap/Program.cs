@@ -23,18 +23,20 @@ namespace Login
                 connection.Open();
 
                 char accessauthority = ' ';
+                string accountname = " ";
+                int id_user = 0;
 
                 // Chọn đăng nhập, đăng ký và thoát
                 string noti1 = "1.Đăng nhập.\n2.Đăng Ký.\n3.Exit.\n";
                 int choose1 = Rogin.Nhap_Vao(1, 3, noti1);
-                Rogin.First_Move(connection, ref accessauthority, choose1);
+                Rogin.First_Move(connection, ref accessauthority, ref accountname, ref id_user, choose1);
 
                 // Vai trò Admin Lọc user ảo, user rác
                 if(accessauthority == 'A')
                 {
                     string noti2 = "1.Delete user dựa trên số lần đăng nhập." +
                         "\n2.Delete user dựa trên số lần bị report." + "\n3.Delete user dựa trên số lần comment." +
-                        "\n4. Delete user dựa trên userId.";
+                        "\n4. Delete user dựa trên userId.\n5.Exit.";
 
                     int choose2 = Rogin.Nhap_Vao(1, 5, noti2);
                     Admin.Loc_Rac(connection, choose2);
