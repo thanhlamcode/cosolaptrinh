@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Film4
+namespace Film3
 {
     internal class Program
     {
@@ -15,11 +15,6 @@ namespace Film4
         {
             //chuỗi kết nối đến csdl
             string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Asus\source\repos\thanhlamcode\DangNhap\DangNhap\Project_DB.mdf;Integrated Security=True";
-            //nhập thông tin từ user
-            Console.WriteLine("Nhap thong tin phim ( ten hoac the loai ):");
-            string searchTerm = Console.ReadLine();
-            //tạo danh sách để lưu kq tìm kiếm
-            List<string> searchResults = new List<string>();
             //tạo kết nối tới csdl
             using (var connection = new SqlConnection(connectionString))
             {
@@ -27,31 +22,33 @@ namespace Film4
                 //tạo đối tượng Sqlcommand
                 using (var command = connection.CreateCommand())
                 {
-                    //thiết lập câu truy vấn sql với tham số tìm kiếm
-                    command.CommandText = "Select filmid, tenphim, theloai, nhasanxuat, sotap, luotxem, doanhthu, rating FROM MOVIE WHERE tenphim LIKE @searchTerm OR theloai LIKE @searchTerm";
-                    command.Parameters.AddWithValue("@searchTerm", $"%{searchTerm}%");
-                    //thực thi câu truy vấn 
-                    using (var reader = command.ExecuteReader())
+                    //thiết lập câu truy vấn sql (ở đây dùng ORDER BY để xếp rating giảm dần)
+                    command.CommandText = "Select filmid, tenphim, theloai, nhasanxuat, sotap, luotxem, doanhthu, rating FROM MOVIE WHERE filmid >= @filmid ORDER BY rating DESC";
+                    //thiết lập tham số 
+                    var FilmId = command.Parameters.AddWithValue("@filmid", 5);
+                    FilmId.Value = 0;
+                    //thực thi câu truy vấn
+                    var sqlreader = command.ExecuteReader();
+                    //kiểm tra có trả về dữ liệu k ?
+                    if (sqlreader.HasRows)
                     {
-                        //ktra kq có trả về dlieu k ?
-                        if (reader.HasRows)
+
+                        Console.WriteLine("Xep hang cac bo phim :");
+                        //đọc kq và in ra 
+                        while (sqlreader.Read())
                         {
-                            Console.WriteLine("Ket qua tim kiem :");
-                            while (reader.Read())
-                            {
-                                var tenPhim = reader.GetString(1);
-                                var theLoai = reader.GetString(2);
-                                var nsx = reader.GetString(3);
-                                var soTap = reader.GetInt32(4);
-                                searchResults.Add($"{tenPhim} ({soTap} tap)\n - the loai phim :{theLoai}\n - NSX :{nsx}");
-                            }
-                            foreach (var results in searchResults)
-                            {
-                                Console.WriteLine(results);
-                            }
+                            var id = sqlreader.GetInt32(0);
+                            var ten = sqlreader["tenphim"];
+                            var ranked = sqlreader["rating"];
+                            var lxem = sqlreader.GetInt32(6);
+                            Console.WriteLine($"rating: {ranked} - {ten} ({lxem} luot xem)");
                         }
-                        else { Console.WriteLine("Khong tim thay phim phu hop.");}
                     }
+                    else
+                    {
+                        Console.WriteLine("Khong co du lieu phim nay");
+                    }
+                    Console.WriteLine("Ban muon xem bo phim nao ?");
                 }
                 //đóng kết nối
                 connection.Close();
