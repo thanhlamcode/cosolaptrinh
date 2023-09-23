@@ -1,69 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Linq;
-using System.Net.Http;
-using System.Security.Cryptography;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _2
+namespace Film4
 {
     internal class Program
     {
         static void Main(string[] args)
         {
+            //chuỗi kết nối đến csdl
+            string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Asus\source\repos\thanhlamcode\DangNhap\DangNhap\Project_DB.mdf;Integrated Security=True";
+            //nhập thông tin từ user
+            Console.WriteLine("Nhap thong tin phim ( ten hoac the loai ):");
+            string searchTerm = Console.ReadLine();
+            //tạo danh sách để lưu kq tìm kiếm
+            List<string> searchResults = new List<string>();
+            //tạo kết nối tới csdl
+            using (var connection = new SqlConnection(connectionString))
             {
-                Console.OutputEncoding = Encoding.UTF8;
-                Console.InputEncoding= Encoding.UTF8;
-
-                // Chuỗi kết nối tới cơ sở dữ liệu
-                string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\HP\source\repos\thanhlamcode\DangNhap\DangNhap\Project_DB.mdf;Integrated Security=True";
-                using (var connection = new SqlConnection(connectionString))
-                    
-                try
+                connection.Open();
+                //tạo đối tượng Sqlcommand
+                using (var command = connection.CreateCommand())
                 {
+                    //thiết lập câu truy vấn sql với tham số tìm kiếm
+                    command.CommandText = "Select filmid, tenphim, theloai, nhasanxuat, sotap, luotxem, doanhthu, rating FROM MOVIE WHERE tenphim LIKE @searchTerm OR theloai LIKE @searchTerm";
+                    command.Parameters.AddWithValue("@searchTerm", $"%{searchTerm}%");
+                    //thực thi câu truy vấn 
+                    using (var reader = command.ExecuteReader())
                     {
-                        connection.Open();
-
-                            // ID của phim cần xem thông tin chi tiết
-                            int filmId = 1;
-
-                            // Truy vấn thông tin chi tiết về phim từ cơ sở dữ liệu
-                            string query = "SELECT Title, Rank, Rating, Summary FROM Films WHERE FilmId = @FilmId";
-                        SqlCommand command = new SqlCommand(query, connection);
-                        command.Parameters.AddWithValue("@FilmId", filmId);
-
-                        using (SqlDataReader reader = command.ExecuteReader())
+                        //ktra kq có trả về dlieu k ?
+                        if (reader.HasRows)
                         {
-                            if (reader.Read())
+                            Console.WriteLine("Ket qua tim kiem :");
+                            while (reader.Read())
                             {
-                                // Lấy thông tin từ dữ liệu trả về
-                                string title = reader.GetString(0);
-                                int rank = reader.GetInt32(1);
-                                double rating = reader.GetDouble(2);
-                                string summary = reader.GetString(3);
-
-                                // Hiển thị thông tin chi tiết về phim
-                                Console.WriteLine("Title: " + title);
-                                Console.WriteLine("Rank: " + rank);
-                                Console.WriteLine("Rating: " + rating);
-                                Console.WriteLine("Summary: " + summary);
+                                var tenPhim = reader.GetString(1);
+                                var theLoai = reader.GetString(2);
+                                var nsx = reader.GetString(3);
+                                var soTap = reader.GetInt32(4);
+                                searchResults.Add($"{tenPhim} ({soTap} tap)\n - the loai phim :{theLoai}\n - NSX :{nsx}");
                             }
-                            else
+                            foreach (var results in searchResults)
                             {
-                                Console.WriteLine("Phim không tồn tại.");
+                                Console.WriteLine(results);
                             }
-
                         }
-                            connection.Close();
+                        else { Console.WriteLine("Khong tim thay phim phu hop.");}
                     }
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Lỗi: " + ex.Message);
-                }
+                //đóng kết nối
+                connection.Close();
             }
         }
     }
