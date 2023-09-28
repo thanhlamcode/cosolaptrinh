@@ -36,7 +36,7 @@ namespace Loginsan1
                 int rowC = database.Count;
 
                 string[] option1 = new string[] { "Đăng Nhập", " Đăng Ký ", "  Thoát  " };
-                Menu menu = new Menu(option1, title);
+                Menu menu = new Menu(option1, title, false);
                 int choice1 = menu.Run();
 
                 switch (choice1)

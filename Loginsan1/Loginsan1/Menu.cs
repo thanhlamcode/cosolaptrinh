@@ -9,104 +9,126 @@ namespace Loginsan1
 {
     internal class Menu
     {
-        private int SelectedIndex;
         private string Prompts;
-        private string Accoutprompt;
         private string[] Options;
+        private int SelectedIndex;
+        private bool Flag;
 
-        public Menu(string[] option, string prompt, string accountprompt = " ")
+        public Menu(string[] options, string prompts, bool flag = true)
         {
-            Options = option;
-            Prompts = prompt;
-            Accoutprompt = accountprompt;
+            Prompts = prompts;
+            Flag = flag;
+            Options = options;
             SelectedIndex = 0;
         }
 
         private void Display()
         {
-            Printtitle();
+            int num_title = 2;
+            if (!Flag)
+            {
+                Print_title();
+                num_title = 0;
+            }
+            else Print_Prompts();
+
+            string text = null;
+            int t1 = (Console.WindowWidth - 60) / 2;
+            int t2 = Prompts.Split('\n').Length + num_title;
+            Console.SetCursorPosition(t1, t2);
+            Console.WriteLine('+' + new string('-', 58) + '+');
 
             for (int i = 0; i < Options.Length; i++)
             {
-                string currentoption = Options[i];
-                string prefix;
-
-                int screenWidth = Console.WindowWidth;
-                int screenHeight = Console.WindowHeight;
-                int leftMargin = (screenWidth - Prompts.Split('\n')[0].Length - 20) / 2;
-                int topMargin = Prompts.Split('\n').Length;
-            if (leftMargin > 0 && leftMargin < screenWidth && topMargin > 0 && topMargin < screenHeight)
+                text = Options[i];
+                char prefix;
+                int mid_2 = (50 - (Options[i].Length + 8)) / 2; // Can thay đổi số để chỉnh sao cho nó đẹp hơn
+                Console.SetCursorPosition(t1, t2 + 1 + i);
+                Console.Write("|");
+                Console.SetCursorPosition(t1 + 6 + mid_2, t2 + 1 + i);
+                if (i == SelectedIndex)
                 {
-                    Console.SetCursorPosition(leftMargin, topMargin + i);
-
-                    if (i == SelectedIndex)
-                    {
-                        prefix = ">";
-                        Console.ForegroundColor = ConsoleColor.DarkYellow;
-                        Console.BackgroundColor = ConsoleColor.White;
-                    }
-                    else
-                    {
-                        prefix = " ";
-                        Console.ForegroundColor = ConsoleColor.White;
-                        Console.BackgroundColor = ConsoleColor.Black;
-                    }
-                    Console.WriteLine($"{prefix} --{currentoption}--");
+                    prefix = '>';
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.BackgroundColor = ConsoleColor.White;
                 }
+                else
+                {
+                    prefix = ' ';
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.BackgroundColor = ConsoleColor.Black;
+                }
+                Console.Write($"{new string(prefix, 2)}--{text}--");
+                Console.SetCursorPosition(t1 + 59, t2 + 1 + i);
+                Console.ResetColor();
+                Console.WriteLine("|");
             }
-            Console.ResetColor();
+
+            Console.SetCursorPosition(t1, t2 + Options.Length + 1);
+            Console.WriteLine('+' + new string('-', 58) + '+');
+        }
+
+        private void Print_Prompts()
+        {
+            int t1 = (Console.WindowWidth - 60) / 2;
+
+            Console.SetCursorPosition(t1, 0);
+            Console.WriteLine('+' + new string('-', 58) + '+');
+
+            for (int i = 0; i < Prompts.Split('\n').Length; i++)
+            {
+                int mid_2 = (50 - Prompts.Split('\n')[i].Length) / 2; // Dùng để hiển thị text ở giữa của khung
+                Console.SetCursorPosition(t1, 1 + i);
+                Console.Write("|");
+                Console.SetCursorPosition(t1 + 6 + mid_2, 1 + i);
+                Console.WriteLine($"{Prompts.Split('\n')[i]}");
+                Console.SetCursorPosition(t1 + 59, 1 + i);
+                Console.WriteLine("|");
+            }
+            Console.SetCursorPosition(t1, Prompts.Split('\n').Length + 1);
+            Console.WriteLine('+' + new string('-', 58) + '+');
         }
 
         public int Run()
         {
-            ConsoleKey keyPress;
+            ConsoleKey Keypress;
             do
             {
                 Console.Clear();
                 Display();
-                var key = Console.ReadKey(intercept: true);
-                keyPress = key.Key;
+                var key = Console.ReadKey(intercept: true).Key;
+                Keypress = key;
 
-                if (keyPress == ConsoleKey.UpArrow)
+                if (Keypress == ConsoleKey.UpArrow)
                 {
                     SelectedIndex--;
-                    if(SelectedIndex < 0)
+                    if (SelectedIndex < 0)
                     {
                         SelectedIndex = Options.Length - 1;
-                    }    
+                    }
                 }
-                else if (keyPress == ConsoleKey.DownArrow)
+                else if (Keypress == ConsoleKey.DownArrow)
                 {
                     SelectedIndex++;
-                    if(SelectedIndex == Options.Length)
+                    if (SelectedIndex == Options.Length)
                     {
                         SelectedIndex = 0;
-                    }    
+                    }
                 }
-            } while (keyPress != ConsoleKey.Enter);
+            } while (Keypress != ConsoleKey.Enter);
 
             return SelectedIndex;
         }
 
-        private void Printtitle()
+        private void Print_title()
         {
-            int screenWidth = Console.WindowWidth;
-
-            // Tính toán vị trí in để đưa văn bản vào giữa màn hình
-            int leftMargin = (screenWidth - Prompts.Split('\n')[1].Length - 10) / 2;
-
-            // Tách các dòng văn bản và in chúng
-            string[] lines = Prompts.Split('\n');
-            if (leftMargin > 0 && leftMargin < screenWidth)
+            int t1 = (Console.WindowWidth - 87) / 2;
+            for (int i = 0; i < Prompts.Split('\n').Length; i++)
             {
-                for (int i = 0; i < lines.Length; i++)
-                {
-                    Console.SetCursorPosition(leftMargin, 0 + i);
-                    Console.WriteLine(lines[i]);
-                }
+                Console.SetCursorPosition(t1, i);
+                Console.WriteLine($"{Prompts.Split('\n')[i]}");
             }
-            Console.SetCursorPosition(leftMargin, Prompts.Split('\n').Length);
-            Console.WriteLine(Accoutprompt);
         }
     }
+
 }

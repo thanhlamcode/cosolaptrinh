@@ -9,7 +9,7 @@ namespace Loginsan1
 {
     internal class Admin
     {
-        public static void Bin(string filepath, string title, string accountnotify, ref bool gate_next, ref bool gate_end)
+        public static void Bin(string filepath, string accountnotify, ref bool gate_next, ref bool gate_end)
         {
             List<List<string>> database = new List<List<string>>();
             List<List<string>> Mangtam = new List<List<string>>();
@@ -19,7 +19,7 @@ namespace Loginsan1
                 database = First_Interface.Read_File(filepath);
                 string[] option2 = new string[] {"Lọc theo số lần đăng nhập", "Lọc theo số lần bị report", 
                     "Lọc theo số lần comment", "Lọc theo AccountId", "Thoát"};
-                Menu menu = new Menu(option2, title, accountnotify);
+                Menu menu = new Menu(option2, accountnotify);
                 int choice2 = menu.Run();
                 switch (choice2)
                 {

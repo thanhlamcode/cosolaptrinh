@@ -35,7 +35,7 @@ namespace Loginsan1
                 // Phần làm admin
                 while (!gate_next && !gate_end)
                 {
-                    Admin.Bin(filepath, title, accountnotify, ref gate_next, ref gate_end);
+                    Admin.Bin(filepath, accountnotify, ref gate_next, ref gate_end);
                 }
             }    
             else
