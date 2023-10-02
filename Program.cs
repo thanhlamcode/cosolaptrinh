@@ -1,146 +1,125 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _4
+namespace _11
 {
     internal class Program
     {
-        static string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\HP\source\repos\thanhlamcode\DangNhap\DangNhap\Project_DB.mdf;Integrated Security=True";
-
+        static string dataFilePath = @"C:\Users\HP\OneDrive\Tài liệu\N\n.txt"; // Đường dẫn đến tệp văn bản chứa dữ liệu
         static void Main(string[] args)
         {
             Console.OutputEncoding = Encoding.UTF8;
             Console.InputEncoding = Encoding.Unicode;
 
-            using (var connection = new SqlConnection(connectionString))
+
+
+            List<string> dataLines = File.ReadAllLines(dataFilePath).ToList();
+
+            while (true)
             {
-                connection.Open();
+                Console.WriteLine("==== Chương trình quản lý báo cáo bình luận ====");
+                Console.WriteLine("1. Thêm báo cáo bình luận");
+                Console.WriteLine("2. Đổi mật khẩu người dùng");
+                Console.WriteLine("0. Thoát chương trình");
+                Console.WriteLine("==============================================");
 
-                while (true)
+                Console.Write("Vui lòng chọn một tùy chọn: ");
+                int option = Convert.ToInt32(Console.ReadLine());
+
+                switch (option)
                 {
-                    Console.WriteLine("==== Chương trình quản lý báo cáo bình luận ====");
-                    Console.WriteLine("1. Thêm báo cáo bình luận");
-                    Console.WriteLine("2. Đổi mật khẩu người dùng");
-                    Console.WriteLine("0. Thoát chương trình");
-                    Console.WriteLine("==============================================");
-
-                    Console.Write("Vui lòng chọn một tùy chọn: ");
-                    int option = Convert.ToInt32(Console.ReadLine());
-
-                    switch (option)
-                    {
-                        case 1:
-                            AddCommentReport(connection);
-                            break;
-                        case 2:
-                            ChangeUserPassword(connection);
-                            break;
-                        case 0:
-                            Environment.Exit(0);
-                            break;
-                        default:
-                            Console.WriteLine("Lựa chọn không hợp lệ. Vui lòng thử lại.");
-                            break;
-                    }
-
-                    Console.WriteLine();
+                    case 1:
+                        AddCommentReport(dataLines);
+                        break;
+                    case 2:
+                        ChangeUserPassword(dataLines);
+                        break;
+                    case 0:
+                        Environment.Exit(0);
+                        break;
+                    default:
+                        Console.WriteLine("Lựa chọn không hợp lệ. Vui lòng thử lại.");
+                        break;
                 }
+
+                Console.WriteLine();
             }
         }
 
-        static void AddCommentReport(SqlConnection connection)
+        static void AddCommentReport(List<string> dataLines)
         {
             Console.WriteLine("==== Thêm báo cáo bình luận ====");
             Console.Write("Nhập tên người dùng (username): ");
             string username = Console.ReadLine();
 
-            // Kiểm tra xem người dùng có tồn tại trong cơ sở dữ liệu hay không
-            string checkQuery = "SELECT COUNT(*) FROM Account WHERE Username = @Username";
-            using (var command = new SqlCommand(checkQuery, connection))
+            // Kiểm tra xem người dùng có tồn tại trong dữ liệu hay không
+            string userData = dataLines.FirstOrDefault(line => line.StartsWith("Username:") && line.Substring(9).Trim() == username);
+            if (userData != null)
             {
-                command.Parameters.AddWithValue("@Username", username);
-                int accountCount = (int)command.ExecuteScalar();
+                int reportTime = int.Parse(userData.Split(',')[1].Trim());
+                reportTime++;
 
-                if (accountCount > 0)
+                // Cập nhật dữ liệu người dùng
+                for (int i = 0; i < dataLines.Count; i++)
                 {
-                    // Tăng giá trị ReportTime trong bảng Account
-                    string updateQuery = "UPDATE Account SET ReportTime = ReportTime + 1 WHERE Username = @Username";
-                    using (var updateCommand = new SqlCommand(updateQuery, connection))
+                    if (dataLines[i] == userData)
                     {
-                        updateCommand.Parameters.AddWithValue("@Username", username);
-                        updateCommand.ExecuteNonQuery();
+                        dataLines[i] = $"Username: {username}, ReportTime: {reportTime}";
+                        break;
                     }
+                }
 
-                    Console.WriteLine("Báo cáo bình luận thành công.");
-                }
-                else
-                {
-                    Console.WriteLine("Người dùng không tồn tại.");
-                }
+                File.WriteAllLines(dataFilePath, dataLines);
+
+                Console.WriteLine("Báo cáo bình luận thành công.");
+            }
+            else
+            {
+                Console.WriteLine("Người dùng không tồn tại.");
             }
         }
-        static void ChangeUserPassword(SqlConnection connection)
+
+        static void ChangeUserPassword(List<string> dataLines)
         {
             Console.WriteLine("==== Đổi mật khẩu người dùng ====");
             Console.Write("Nhập tên người dùng (username): ");
             string username = Console.ReadLine();
 
-            // Kiểm tra xem người dùng có tồn tại trong cơ sở dữ liệu hay không
-            string checkUserQuery = "SELECT COUNT(*) FROM Account WHERE Username = @Username";
-            using (var checkUserCommand = new SqlCommand(checkUserQuery, connection))
+            // Kiểm tra xem người dùng có tồn tại trong dữ liệu hay không
+            string userData = dataLines.FirstOrDefault(line => line.StartsWith("Username:") && line.Substring(9).Trim() == username);
+            if (userData != null)
             {
-                checkUserCommand.Parameters.AddWithValue("@Username", username);
-                int userCount = (int)checkUserCommand.ExecuteScalar();
+                Console.Write("Nhập mật khẩu cũ: ");
+                string oldPassword = Console.ReadLine();
 
-                if (userCount > 0)
+                string passwordData = dataLines.FirstOrDefault(line => line.StartsWith("Username:") && line.Contains("Password:") && line.Substring(9).Trim() == username && line.Split(':')[2].Trim() == oldPassword);
+                if (passwordData != null)
                 {
-                    Console.Write("Nhập mật khẩu cũ: ");
-                    string oldPassword = Console.ReadLine();
+                    Console.Write("Nhập mật khẩu mới: ");
+                    string newPassword = Console.ReadLine();
 
-                    // Kiểm tra mật khẩu cũ có khớp với người dùng hay không
-                    string checkPasswordQuery = "SELECT COUNT(*) FROM Account WHERE Username = @Username AND Password = @OldPassword";
-                    using (var checkPasswordCommand = new SqlCommand(checkPasswordQuery, connection))
+                    // Cập nhật mật khẩu mới trong dữ liệu
+                    for (int i = 0; i < dataLines.Count; i++)
                     {
-                        checkPasswordCommand.Parameters.AddWithValue("@Username", username);
-                        checkPasswordCommand.Parameters.AddWithValue("@OldPassword", oldPassword);
-                        int passwordCount = (int)checkPasswordCommand.ExecuteScalar();
-
-                        if (passwordCount > 0)
+                        if (dataLines[i] == passwordData)
                         {
-                            Console.Write("Nhập mật khẩu mới: ");
-                            string newPassword = Console.ReadLine();
-
-                            // Cập nhật mật khẩu mới cho người dùng
-                            string updateQuery = "UPDATE Account SET Password = @NewPassword WHERE Username = @Username";
-                            using (var updateCommand = new SqlCommand(updateQuery, connection))
-                            {
-                                updateCommand.Parameters.AddWithValue("@NewPassword", newPassword);
-                                updateCommand.Parameters.AddWithValue("@Username", username);
-                                int rowsAffected = updateCommand.ExecuteNonQuery();
-
-                                if (rowsAffected > 0)
-                                {
-                                    Console.WriteLine("Đổi mật khẩu thành công.");
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Đổi mật khẩu không thành công.");
-                                }
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine("Mật khẩu cũ không chính xác.");
+                            dataLines[i] = $"Username: {username}, Password: {newPassword}";
+                            break;
                         }
                     }
+
+                    File.WriteAllLines(dataFilePath, dataLines);
+
+                    Console.WriteLine("Đổi mật khẩu thành công.");
                 }
                 else
                 {
-                    Console.WriteLine("Người dùng không tồn tại.");
+                    Console.WriteLine("Mật khẩu cũ không chính xác");
+                    return;
                 }
             }
         }
