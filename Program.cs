@@ -51,67 +51,29 @@ namespace QuerySystemIO
         static void AddCommentReport(List<string> dataLines)
         {
             Console.WriteLine("==== Thêm báo cáo bình luận ====");
-            Console.Write("Nhập tên người dùng (username): ");
-            string username = Console.ReadLine();
+            string username = "";
 
-            // Kiểm tra xem người dùng có tồn tại trong dữ liệu hay không
-            string userData = dataLines.FirstOrDefault(line => line.Contains(username));
-            if (userData != null)
+            do
             {
-                // Lấy số lần báo cáo hiện tại của người dùng
-                int reportTime = int.Parse(userData.Split(',')[4].Trim());
-                reportTime++;
+                Console.Write("Nhập tên người dùng (username): ");
+                username = Console.ReadLine();
 
-                // Cập nhật dữ liệu người dùng
-                for (int i = 0; i < dataLines.Count; i++)
+                // Kiểm tra xem người dùng có tồn tại trong dữ liệu hay không
+                string userData = dataLines.FirstOrDefault(line => line.Contains(username));
+                if (userData != null)
                 {
-                    if (dataLines[i].Contains(username))
-                    {
-                        // Cập nhật số lần báo cáo mới
-                        string[] userDataParts = dataLines[i].Split(',');
-                        userDataParts[4] = reportTime.ToString();
-                        dataLines[i] = string.Join(",", userDataParts);
-                        break;
-                    }
-                }
+                    // Lấy số lần báo cáo hiện tại của người dùng
+                    int reportTime = int.Parse(userData.Split(',')[4].Trim());
+                    reportTime++;
 
-                // Ghi lại dữ liệu vào tệp
-                File.WriteAllLines(dataFilePath, dataLines);
-
-                Console.WriteLine("Báo cáo bình luận thành công.");
-            }
-            else
-            {
-                Console.WriteLine("Người dùng không tồn tại.");
-            }
-        }
-
-        static void ChangeUserPassword(List<string> dataLines)
-        {
-            Console.WriteLine("==== Đổi mật khẩu người dùng ====");
-            Console.Write("Nhập tên người dùng (username): ");
-            string username = Console.ReadLine();
-
-            // Kiểm tra xem người dùng có tồn tại trong dữ liệu hay không
-            string userData = dataLines.FirstOrDefault(line => line.Contains(username));
-            if (userData != null)
-            {
-                Console.Write("Nhập mật khẩu cũ: ");
-                string oldPassword = Console.ReadLine();
-
-                string passwordData = dataLines.FirstOrDefault(line => line.Contains(username) && line.Contains(oldPassword));
-                if (passwordData != null)
-                {
-                    Console.Write("Nhập mật khẩu mới: ");
-                    string newPassword = Console.ReadLine();
-
-                    // Cập nhật mật khẩu mới trong dữ liệu
+                    // Cập nhật dữ liệu người dùng
                     for (int i = 0; i < dataLines.Count; i++)
                     {
-                        if (dataLines[i].Contains(username) && dataLines[i].Contains(oldPassword))
+                        if (dataLines[i].Contains(username))
                         {
+                            // Cập nhật số lần báo cáo mới
                             string[] userDataParts = dataLines[i].Split(',');
-                            userDataParts[2] = newPassword;
+                            userDataParts[4] = reportTime.ToString();
                             dataLines[i] = string.Join(",", userDataParts);
                             break;
                         }
@@ -120,18 +82,62 @@ namespace QuerySystemIO
                     // Ghi lại dữ liệu vào tệp
                     File.WriteAllLines(dataFilePath, dataLines);
 
-                    Console.WriteLine("Đổi mật khẩu thành công.");
-                }
-                else
-                {
-                    Console.WriteLine("Mật khẩu cũ không chính xác");
+                    Console.WriteLine("Báo cáo bình luận thành công.");
                     return;
                 }
-            }
-            else
+
+                Console.WriteLine("Người dùng không tồn tại. Vui lòng thử lại.");
+            } while (true);
+        }
+        static void ChangeUserPassword(List<string> dataLines)
+        {
+            Console.WriteLine("==== Đổi mật khẩu người dùng ====");
+            string username = "";
+
+            while (true)
             {
-                Console.WriteLine("Người dùng không tồn tại.");
+                Console.Write("Nhập tên người dùng (username): ");
+                username = Console.ReadLine();
+
+                // Kiểm tra xem người dùng có tồn tại trong dữ liệu hay không
+                string userData = dataLines.FirstOrDefault(line => line.Contains(username));
+                if (userData != null)
+                {
+                    break;
+                }
+
+                Console.WriteLine("Tên người dùng không tồn tại. Vui lòng thử lại.");
             }
+
+            Console.Write("Nhập mật khẩu cũ: ");
+            string oldPassword = Console.ReadLine();
+            string passwordData = dataLines.FirstOrDefault(line => line.Contains(username) && line.Contains(oldPassword));
+            while (passwordData == null)
+            {
+                Console.WriteLine("Mật khẩu cũ không chính xác. Vui lòng thử lại.");
+                Console.Write("Nhập mật khẩu cũ: ");
+                oldPassword = Console.ReadLine();
+                passwordData = dataLines.FirstOrDefault(line => line.Contains(username) && line.Contains(oldPassword));
+            }
+
+            Console.Write("Nhập mật khẩu mới: ");
+            string newPassword = Console.ReadLine();
+
+            // Cập nhật mật khẩu mới trong dữ liệu
+            for (int i = 0; i < dataLines.Count; i++)
+            {
+                if (dataLines[i].Contains(username) && dataLines[i].Contains(oldPassword))
+                {
+                    string[] userDataParts = dataLines[i].Split(',');
+                    userDataParts[2] = newPassword;
+                    dataLines[i] = string.Join(",", userDataParts);
+                    break;
+                }
+            }
+
+            // Ghi lại dữ liệu vào tệp
+            File.WriteAllLines(dataFilePath, dataLines);
+            Console.WriteLine("Đổi mật khẩu thành công.");
         }
     }
 }
