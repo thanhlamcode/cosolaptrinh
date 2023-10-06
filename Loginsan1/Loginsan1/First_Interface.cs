@@ -24,6 +24,22 @@ namespace Loginsan1
             }
             return database;
         }
+
+        public static void Print_Loop_File(List<List<string>> db, string filepath)
+        {
+            using (StreamWriter st = new StreamWriter(filepath))
+            {
+                for (int i = 0; i < db.Count; i++)
+                {
+                    for (int j = 0; j < db[0].Count; j++)
+                    {
+                        st.Write(db[i][j]);
+                        if (j + 1 < db[0].Count) st.Write(',');
+                    }
+                    st.Write('\n');
+                }
+            }
+        }
         public static void First_I(string filepath, string title, ref string accountnotify, ref bool accessauthority, ref bool gate_next, ref bool gate_end)
         {
             List<List<string>> database = new List<List<string>>();
@@ -46,11 +62,12 @@ namespace Loginsan1
                         Console.Clear();
                         if (accessauthority) accountnotify = $"{AccountId} - {TenNguoiDung} - Authority is Admin";
                         else accountnotify = $"{AccountId} - {TenNguoiDung} - Authority is User";
+                        Print_Loop_File(database, filepath);
                         gate_next = true;
                         break;
                     case 1:
                         DangKy(filepath, rowC, database);
-                        gate_next = true;
+                        Console.ReadKey();
                         break;
                     case 2:
                         gate_end = true;
@@ -70,7 +87,7 @@ namespace Loginsan1
                 string Username = Check_Nhapvao.Check_Same_Name(rowC, database); // Kiểm tra xem liệu có trùng tên không
                 string Password = Check_Nhapvao.Themdulieu_string("Nhập vào Password: ");
 
-                int logintime = 1;
+                int logintime = 0;
                 int reporttime = 0;
                 int commenttime = 0;
                 string accessright = "U";
@@ -78,7 +95,7 @@ namespace Loginsan1
                 sm.WriteLine($"{accountId},{Username},{Password},{logintime},{reporttime},{commenttime},{accessright}");
             }
 
-            Console.WriteLine("Dữ liệu đã được ghi vào tệp tin.");
+            Console.WriteLine("Bạn đã đăng ký thành công. Vui lòng ấn bất kỳ nút nào để thoát ra và thực hiện việc đăng nhập.");
         }
 
         public static bool DangNhap(string filepath, int rowC, List<List<string>> database, ref string TenNguoiDung, ref string AccountId)
@@ -93,22 +110,24 @@ namespace Loginsan1
                 Username = Check_Nhapvao.Themdulieu_string("Username: ");
                 Password = Check_Nhapvao.Themdulieu_string("Password: ");
 
-                using (StreamReader sr = new StreamReader(filepath))
+
+                for (int i = 0; i < rowC; i++)
                 {
-                    for (int i = 0; i < rowC; i++)
+                    if (Username == database[i][1] && Password == database[i][2])
                     {
-                        if (Username == database[i][1] && Password == database[i][2])
-                        {
-                            AccountId = database[i][0];
-                            TenNguoiDung = database[i][1];
-                            if (database[i][6] == "A") return true;
-                            else return false;
-                        }
+                        AccountId = database[i][0];
+                        TenNguoiDung = database[i][1];
+
+                        int login_turn = Convert.ToInt32(database[i][3]);
+                        login_turn++;
+                        database[i][3] = Convert.ToString(login_turn);
+
+                        if (database[i][6] == "A") return true;
+                        else return false;
                     }
                 }
                 errormsgflag = true;
             }
-
         }
     }
 }

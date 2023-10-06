@@ -19,25 +19,25 @@ namespace Loginsan1
                 database = First_Interface.Read_File(filepath);
                 string[] option2 = new string[] {"Lọc theo số lần đăng nhập", "Lọc theo số lần bị report", 
                     "Lọc theo số lần comment", "Lọc theo AccountId", "Thoát"};
-                Menu menu = new Menu(option2, accountnotify);
+                Menu menu = new Menu(option2, accountnotify + "\n" +"LỌC USER");
                 int choice2 = menu.Run();
                 switch (choice2)
                 {
                     case 0:
-                        Login_Report_CommentTime(database, Mangtam, Mangbin, 3);
-                        Print_Loop_File(Mangtam, filepath);
+                        Loc_User(database, Mangtam, Mangbin, 3);
+                        First_Interface.Print_Loop_File(Mangtam, filepath);
                         break;
                     case 1:
-                        Login_Report_CommentTime(database, Mangtam, Mangbin);
-                        Print_Loop_File(Mangtam, filepath);
+                        Loc_User(database, Mangtam, Mangbin, 4);
+                        First_Interface.Print_Loop_File(Mangtam, filepath);
                         break;
                     case 2:
-                        Login_Report_CommentTime(database, Mangtam, Mangbin, 5);
-                        Print_Loop_File(Mangtam, filepath);
+                        Loc_User(database, Mangtam, Mangbin, 5);
+                        First_Interface.Print_Loop_File(Mangtam, filepath);
                         break;
                     case 3:
-                        Loc_AccountId(database, Mangtam, Mangbin);
-                        Print_Loop_File(Mangtam, filepath);
+                        Loc_User(database, Mangtam, Mangbin, 0);
+                        First_Interface.Print_Loop_File(Mangtam, filepath);
                         break;
                     case 4:
                         gate_end = true;
@@ -50,86 +50,80 @@ namespace Loginsan1
             }
         }
 
-        public static void Print_Loop_File(List<List<string>> Mangtam, string filepath)
-        {
-            using (StreamWriter st = new StreamWriter(filepath))
-            {
-                for (int i = 0; i < Mangtam.Count; i++)
-                {
-                    for (int j = 0; j < Mangtam[0].Count; j++)
-                    {
-                        st.Write(Mangtam[i][j]);
-                        if (j + 1 < Mangtam[0].Count) st.Write(',');
-                    }
-                    st.Write('\n');
-                }
-            }
-        }
-        private static void Login_Report_CommentTime(List<List<string>> database, List<List<string>> Mangtam, List<List<string>> Mangbin, int b = 4)
+        private static void Loc_User(List<List<string>> database, List<List<string>> Mangtam, List<List<string>> Mangbin, int b)
         {
             Console.Clear();
-            int a = Check_Nhapvao.Themdulieu_int("Nhập số từ 1 đến 999: ");
-            int n = 0;
-            for(int i = 0; i < database.Count; i++)
+            string text = "Lọc theo ";
+            string text2 = null;
+            if (b == 3)
             {
-                if (int.TryParse(database[i][b], out n) && database[i][6] == "U")
-                {
-                    if (b == 4)
-                    {
-                        if (n > a) Mangbin.Add(database[i]);
-                        else Mangtam.Add(database[i]);
-                    }
-                    else
-                    {
-                        if (n < a) Mangbin.Add(database[i]);
-                        else Mangtam.Add(database[i]);
-                    }
-                }
-                else Mangtam.Add(database[i]);
-            } 
-            
-            if(Mangtam.Count < database.Count)
+                text2 = "Số lần đăng nhập";
+                text += text2 + " nhỏ hơn: ";
+            }
+            else if (b == 4)
             {
-                Console.WriteLine("Đã xóa thành công, những user bị xóa là: ");
-                for(int i = 0; i < Mangbin.Count; i++)
-                {
-                    Console.WriteLine($"{Mangbin[i][1]} - AccountId: {Mangbin[i][0]} - Số lần đăng nhập: {Mangbin[i][b]}");
-                }    
+                text2 = "Số lần report";
+                text += text2 + " lớn hơn: ";
+            }
+            else if (b == 5)
+            { 
+                text2 = "Số lần review phim";
+                text += text2 + " nhỏ hơn: ";
             }
             else
             {
-                Console.WriteLine("Không có User nào thỏa điều kiện.");
-            }    
-        }
+                text2 = "Số lần Account Id";
+                text += text2 + " bằng: ";
+            } 
+                
 
-        private static void Loc_AccountId(List<List<string>> database, List<List<string>> Mangtam, List<List<string>> Mangbin)
-        {
-            int a = Check_Nhapvao.Themdulieu_int("Nhập số từ 100 đến 999: ");
-            int n = 0;
-            for (int i = 0; i < database.Count; i++)
+            while(true)
             {
-                if (int.TryParse(database[i][0], out n) && database[i][6] == "U")
+                int a = Check_Nhapvao.Themdulieu_int(text);
+                int n = 0;
+                for (int i = 0; i < database.Count; i++)
                 {
-                    if (n == a) Mangbin.Add(database[i]);
+                    if (int.TryParse(database[i][b], out n) && database[i][6] == "U")
+                    {
+                        if (b == 4 && n >= a)
+                        {
+                            Mangbin.Add(database[i]);
+                        }
+                        else if (b == 0 && n == a)
+                        {
+                            Mangbin.Add(database[i]);
+                        }
+                        else if ((b == 3 || b == 5) && n <= a)
+                        {
+                            Mangbin.Add(database[i]);
+                        }    
+                        else Mangtam.Add(database[i]);
+                    }
                     else Mangtam.Add(database[i]);
                 }
-                else Mangtam.Add(database[i]);
-            }
 
-            if (Mangtam.Count < database.Count)
-            {
-                Console.WriteLine("Đã xóa thành công, User bị xóa là: ");
-                for (int i = 0; i < Mangbin.Count; i++)
+                if (Mangtam.Count < database.Count)
                 {
-                    Console.WriteLine($"{Mangbin[i][1]} - AccountId: {Mangbin[i][0]}");
+                    Console.Clear();
+                    Console.WriteLine("Đã xóa thành công, những user bị xóa là: ");
+                    for (int i = 0; i < Mangbin.Count; i++)
+                    {
+                        text = $"{Mangbin[i][1]} - AccountId: {Mangbin[i][0]}";
+                        text += b != 0 ? $" - {text2}: { Mangbin[i][b]}" : " "; 
+                        Console.WriteLine(text);                       
+                    }
+                    break;
                 }
-            }
-            else
-            {
-                Console.WriteLine($"Không tồn tại User {a} thỏa điều kiện.");
-            }
-        }
-
-       
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("Không có User nào thỏa điều kiện.");
+                    // Xóa mảng để tránh việc khi ta nhập vào a mà đến else này thì nó sẽ xóa tất cả data có trong hai mảng dưới
+                    // Tránh trường hợp là dữ liệu vẫn còn lưu lại dẫn đến lỗi khi ta nhập lại a để lọc user.
+                    Mangtam.Clear();
+                    Mangbin.Clear();
+                }
+            }    
+        }     
     }
 }

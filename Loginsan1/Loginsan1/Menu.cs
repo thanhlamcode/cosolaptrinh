@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,6 +26,7 @@ namespace Loginsan1
         private void Display()
         {
             int num_title = 2;
+            int max = 0;
             if (!Flag)
             {
                 Print_title();
@@ -32,20 +34,24 @@ namespace Loginsan1
             }
             else Print_Prompts();
 
+            for (int i = 0; i < Options.Length; i++)
+            {
+                if (Options[i].Length > max) max = Options[i].Length;
+                else continue;
+            }
+
             string text = null;
-            int t1 = (Console.WindowWidth - 60) / 2;
             int t2 = Prompts.Split('\n').Length + num_title;
-            Console.SetCursorPosition(t1, t2);
-            Console.WriteLine('+' + new string('-', 58) + '+');
+            Console.SetCursorPosition(0, t2);
+            Console.WriteLine('+' + new string('-', 16 + max) + '+');
 
             for (int i = 0; i < Options.Length; i++)
             {
                 text = Options[i];
                 char prefix;
-                int mid_2 = (50 - (Options[i].Length + 8)) / 2; // Can thay đổi số để chỉnh sao cho nó đẹp hơn
-                Console.SetCursorPosition(t1, t2 + 1 + i);
+                Console.SetCursorPosition(0, t2 + 1 + i); 
                 Console.Write("|");
-                Console.SetCursorPosition(t1 + 6 + mid_2, t2 + 1 + i);
+                Console.SetCursorPosition(6 , t2 + 1 + i);
                 if (i == SelectedIndex)
                 {
                     prefix = '>';
@@ -59,34 +65,38 @@ namespace Loginsan1
                     Console.BackgroundColor = ConsoleColor.Black;
                 }
                 Console.Write($"{new string(prefix, 2)}--{text}--");
-                Console.SetCursorPosition(t1 + 59, t2 + 1 + i);
+                Console.SetCursorPosition(17 + max, t2 + 1 + i); 
                 Console.ResetColor();
                 Console.WriteLine("|");
             }
 
-            Console.SetCursorPosition(t1, t2 + Options.Length + 1);
-            Console.WriteLine('+' + new string('-', 58) + '+');
+            Console.SetCursorPosition(0, t2 + Options.Length + 1);
+            Console.WriteLine('+' + new string('-', 16 + max) + '+');
         }
 
         private void Print_Prompts()
         {
-            int t1 = (Console.WindowWidth - 60) / 2;
-
-            Console.SetCursorPosition(t1, 0);
-            Console.WriteLine('+' + new string('-', 58) + '+');
-
+            int max = 0;
             for (int i = 0; i < Prompts.Split('\n').Length; i++)
             {
-                int mid_2 = (50 - Prompts.Split('\n')[i].Length) / 2; // Dùng để hiển thị text ở giữa của khung
-                Console.SetCursorPosition(t1, 1 + i);
+                if (Prompts.Split('\n')[i].Length > max) max = Prompts.Split('\n')[i].Length;
+                else continue;
+            }
+
+            Console.SetCursorPosition(0, 0);
+            Console.WriteLine('+' + new string('-', 10 + max) + '+');   
+
+                for (int i = 0; i < Prompts.Split('\n').Length; i++)
+            {
+                Console.SetCursorPosition(0, 1 + i);
                 Console.Write("|");
-                Console.SetCursorPosition(t1 + 6 + mid_2, 1 + i);
+                Console.SetCursorPosition(6, 1 + i);
                 Console.WriteLine($"{Prompts.Split('\n')[i]}");
-                Console.SetCursorPosition(t1 + 59, 1 + i);
+                Console.SetCursorPosition(11 + max, 1 + i);
                 Console.WriteLine("|");
             }
-            Console.SetCursorPosition(t1, Prompts.Split('\n').Length + 1);
-            Console.WriteLine('+' + new string('-', 58) + '+');
+            Console.SetCursorPosition(0, Prompts.Split('\n').Length + 1);
+            Console.WriteLine('+' + new string('-', 10 + max) + '+');
         }
 
         public int Run()
@@ -122,10 +132,9 @@ namespace Loginsan1
 
         private void Print_title()
         {
-            int t1 = (Console.WindowWidth - 87) / 2;
             for (int i = 0; i < Prompts.Split('\n').Length; i++)
             {
-                Console.SetCursorPosition(t1, i);
+                Console.SetCursorPosition(0, i);
                 Console.WriteLine($"{Prompts.Split('\n')[i]}");
             }
         }
