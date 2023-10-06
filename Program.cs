@@ -8,7 +8,6 @@ namespace QuerySystemIO
 {
     class Program
     {
-
         static string dataFilePath = @"C:\Users\HP\OneDrive\Tài liệu\N\n.txt"; // Đường dẫn đến tệp văn bản chứa dữ liệu
 
         static void Main(string[] args)
@@ -19,12 +18,14 @@ namespace QuerySystemIO
 
             while (true)
             {
-                Console.WriteLine("==== Chương trình truy vấn dữ liệu ====");
-                Console.WriteLine("1. Thêm báo cáo bình luận");
-                Console.WriteLine("2. Đổi mật khẩu người dùng");
-                Console.WriteLine("0. Thoát chương trình");
-                Console.WriteLine("=====================================");
-
+                Console.Clear();
+                Console.WriteLine("╔════════════════════════════════════════════════╗");
+                Console.WriteLine("║          Chương trình truy vấn dữ liệu         ║");
+                Console.WriteLine("╠════════════════════════════════════════════════╣");
+                Console.WriteLine("║    1. Thêm báo cáo bình luận                   ║");
+                Console.WriteLine("║    2. Đổi mật khẩu người dùng                  ║");
+                Console.WriteLine("║    0. Thoát chương trình                       ║");
+                Console.WriteLine("╚════════════════════════════════════════════════╝");
                 Console.Write("Vui lòng chọn một tùy chọn: ");
                 int option = Convert.ToInt32(Console.ReadLine());
 
@@ -50,7 +51,10 @@ namespace QuerySystemIO
 
         static void AddCommentReport(List<string> dataLines)
         {
-            Console.WriteLine("==== Thêm báo cáo bình luận ====");
+            Console.Clear();
+            Console.WriteLine("╔════════════════════════════════════════════════╗");
+            Console.WriteLine("║           Thêm báo cáo bình luận               ║");
+            Console.WriteLine("╚════════════════════════════════════════════════╝");
             string username = "";
 
             do
@@ -83,15 +87,20 @@ namespace QuerySystemIO
                     File.WriteAllLines(dataFilePath, dataLines);
 
                     Console.WriteLine("Báo cáo bình luận thành công.");
+                    Console.ReadLine(); // Wait for user input
                     return;
                 }
 
                 Console.WriteLine("Người dùng không tồn tại. Vui lòng thử lại.");
             } while (true);
         }
+
         static void ChangeUserPassword(List<string> dataLines)
         {
-            Console.WriteLine("==== Đổi mật khẩu người dùng ====");
+            Console.Clear();
+            Console.WriteLine("╔════════════════════════════════════════════════╗");
+            Console.WriteLine("║         Đổi mật khẩu người dùng                ║");
+            Console.WriteLine("╚════════════════════════════════════════════════╝");
             string username = "";
 
             while (true)
@@ -99,7 +108,7 @@ namespace QuerySystemIO
                 Console.Write("Nhập tên người dùng (username): ");
                 username = Console.ReadLine();
 
-                // Kiểm tra xem người dùng có tồn tại trong dữ liệu hay không
+                // Kiểm tra xem người dùng có tồn tại trong dữliệu hay không
                 string userData = dataLines.FirstOrDefault(line => line.Contains(username));
                 if (userData != null)
                 {
@@ -138,6 +147,7 @@ namespace QuerySystemIO
             // Ghi lại dữ liệu vào tệp
             File.WriteAllLines(dataFilePath, dataLines);
             Console.WriteLine("Đổi mật khẩu thành công.");
+            Console.ReadLine(); // Wait for user input
         }
     }
 }
