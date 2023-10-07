@@ -4,44 +4,50 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace QuerySystemIO
+namespace Film4
 {
-    class Program
+    internal class Program
     {
-        static string dataFilePath = @"C:\Users\HP\OneDrive\Tài liệu\N\n.txt"; // Đường dẫn đến tệp văn bản chứa dữ liệu
-
         static void Main(string[] args)
         {
-            Console.OutputEncoding = Encoding.UTF8;
-            Console.InputEncoding = Encoding.Unicode;
-            List<string> dataLines = File.ReadAllLines(dataFilePath).ToList();
+            string filePath = "C:\\Users\\Asus\\Movie0.txt";
 
-            while (true)
+            bool continueSearching = true;
+            Console.OutputEncoding = Encoding.Unicode;
+            Console.InputEncoding = Encoding.Unicode;
+            while (continueSearching)
             {
-                Console.Clear();
                 Console.WriteLine("╔════════════════════════════════════════════════╗");
-                Console.WriteLine("║          Chương trình truy vấn dữ liệu         ║");
+                Console.WriteLine("║             Chọn tùy chọn tìm kiếm             ║");
                 Console.WriteLine("╠════════════════════════════════════════════════╣");
-                Console.WriteLine("║    1. Thêm báo cáo bình luận                   ║");
-                Console.WriteLine("║    2. Đổi mật khẩu người dùng                  ║");
-                Console.WriteLine("║    0. Thoát chương trình                       ║");
+                Console.WriteLine("║     1. Tìm phim theo tên                       ║");
+                Console.WriteLine("║     2. Tìm phim theo thể loại                  ║");
+                Console.WriteLine("║     3. Top phim có rating cao nhất             ║");
+                Console.WriteLine("║     0. Kết thúc chương trình                   ║");
                 Console.WriteLine("╚════════════════════════════════════════════════╝");
-                Console.Write("Vui lòng chọn một tùy chọn: ");
-                int option = Convert.ToInt32(Console.ReadLine());
+                Console.Write("Nhập lựa chọn của bạn: ");
+                string option = Console.ReadLine();
 
                 switch (option)
                 {
-                    case 1:
-                        AddCommentReport(dataLines);
+                    case "1":
+                        Console.Write("Nhập tên phim: ");
+                        string searchTermName = Console.ReadLine();
+                        SearchMovies(filePath, "tenphim", searchTermName);
                         break;
-                    case 2:
-                        ChangeUserPassword(dataLines);
+                    case "2":
+                        Console.Write("Nhập thể loại phim: ");
+                        string searchTermGenre = Console.ReadLine();
+                        SearchMovies(filePath, "theloai", searchTermGenre);
                         break;
-                    case 0:
-                        Environment.Exit(0);
+                    case "3":
+                        SearchMovies(filePath, "rating", "DESC", 10);
+                        break;
+                    case "4":
+                        continueSearching = false;
                         break;
                     default:
-                        Console.WriteLine("Lựa chọn không hợp lệ. Vui lòng thử lại.");
+                        Console.WriteLine("Lựa chọn không hợp lệ.");
                         break;
                 }
 
@@ -49,105 +55,101 @@ namespace QuerySystemIO
             }
         }
 
-        static void AddCommentReport(List<string> dataLines)
+        static void SearchMovies(string filePath, string columnName, string searchTerm)
         {
-            Console.Clear();
-            Console.WriteLine("╔════════════════════════════════════════════════╗");
-            Console.WriteLine("║           Thêm báo cáo bình luận               ║");
-            Console.WriteLine("╚════════════════════════════════════════════════╝");
-            string username = "";
+            List<string> searchResults = new List<string>();
 
-            do
+            try
             {
-                Console.Write("Nhập tên người dùng (username): ");
-                username = Console.ReadLine();
+                string[] lines = File.ReadAllLines(filePath);
 
-                // Kiểm tra xem người dùng có tồn tại trong dữ liệu hay không
-                string userData = dataLines.FirstOrDefault(line => line.Contains(username));
-                if (userData != null)
+                foreach (string line in lines)
                 {
-                    // Lấy số lần báo cáo hiện tại của người dùng
-                    int reportTime = int.Parse(userData.Split(',')[4].Trim());
-                    reportTime++;
+                    string[] movieData = line.Split(';');
+                    string tenPhim = movieData[0];
+                    string theLoai = movieData[1];
+                    string nsx = movieData[2];
+                    int soTap = int.Parse(movieData[3]);
 
-                    // Cập nhật dữ liệu người dùng
-                    for (int i = 0; i < dataLines.Count; i++)
+                    if (tenPhim.IndexOf(searchTerm, StringComparison.OrdinalIgnoreCase) >= 0 && columnName == "tenphim")
                     {
-                        if (dataLines[i].Contains(username))
+                        searchResults.Add($"{tenPhim} ({soTap} tập)\n- Thể loại phim: {theLoai}\n- NSX: {nsx}");
+                    }
+                    else if (theLoai.IndexOf(searchTerm, StringComparison.OrdinalIgnoreCase) >= 0 && columnName == "theloai")
+                    {
+                        searchResults.Add($"{tenPhim} ({soTap} tập)\n- Thể loại phim: {theLoai}\n- NSX: {nsx}");
+                    }
+                }
+
+                if (searchResults.Any())
+                {
+                    Console.WriteLine("Kết quả tìm kiếm:");
+                    foreach (var result in searchResults)
+                    {
+                        Console.WriteLine(result);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Không tìm thấy phim phù hợp.");
+                }
+            }
+            catch (FileNotFoundException)
+            {
+                Console.WriteLine("File không tồn tại.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Đã xảy ra lỗi: {ex.Message}");
+            }
+        }
+
+        static void SearchMovies(string filePath, string columnName, string sortOrder, int limit)
+        {
+            List<string> searchResults = new List<string>();
+
+            try
+            {
+                string[] lines = File.ReadAllLines(filePath);
+
+                foreach (string line in lines)
+                {
+                    string[] movieData = line.Split(';');
+                    string tenPhim = movieData[0];
+                    string theLoai = movieData[1];
+                    string nsx = movieData[2];
+                    int soTap = int.Parse(movieData[3]);
+                    double rating = double.Parse(movieData[6]);
+
+                    searchResults.Add($"{tenPhim} ({soTap} tập)\n- Thể loại phim: {theLoai}\n- NSX: {nsx}\n- Rating: {rating}");
+                }
+
+                if (searchResults.Any())
+                {
+                    Console.WriteLine("Top phim có rating cao nhất:");
+                    foreach (var result in searchResults.OrderByDescending(r => double.Parse(r.Substring(r.LastIndexOf("Rating: ") + 8))))
+                    {
+                        Console.WriteLine(result);
+                        limit--;
+                        if (limit == 0)
                         {
-                            // Cập nhật số lần báo cáo mới
-                            string[] userDataParts = dataLines[i].Split(',');
-                            userDataParts[4] = reportTime.ToString();
-                            dataLines[i] = string.Join(",", userDataParts);
                             break;
                         }
                     }
-
-                    // Ghi lại dữ liệu vào tệp
-                    File.WriteAllLines(dataFilePath, dataLines);
-
-                    Console.WriteLine("Báo cáo bình luận thành công.");
-                    Console.ReadLine(); // Wait for user input
-                    return;
                 }
-
-                Console.WriteLine("Người dùng không tồn tại. Vui lòng thử lại.");
-            } while (true);
-        }
-
-        static void ChangeUserPassword(List<string> dataLines)
-        {
-            Console.Clear();
-            Console.WriteLine("╔════════════════════════════════════════════════╗");
-            Console.WriteLine("║         Đổi mật khẩu người dùng                ║");
-            Console.WriteLine("╚════════════════════════════════════════════════╝");
-            string username = "";
-
-            while (true)
-            {
-                Console.Write("Nhập tên người dùng (username): ");
-                username = Console.ReadLine();
-
-                // Kiểm tra xem người dùng có tồn tại trong dữliệu hay không
-                string userData = dataLines.FirstOrDefault(line => line.Contains(username));
-                if (userData != null)
+                else
                 {
-                    break;
-                }
-
-                Console.WriteLine("Tên người dùng không tồn tại. Vui lòng thử lại.");
-            }
-
-            Console.Write("Nhập mật khẩu cũ: ");
-            string oldPassword = Console.ReadLine();
-            string passwordData = dataLines.FirstOrDefault(line => line.Contains(username) && line.Contains(oldPassword));
-            while (passwordData == null)
-            {
-                Console.WriteLine("Mật khẩu cũ không chính xác. Vui lòng thử lại.");
-                Console.Write("Nhập mật khẩu cũ: ");
-                oldPassword = Console.ReadLine();
-                passwordData = dataLines.FirstOrDefault(line => line.Contains(username) && line.Contains(oldPassword));
-            }
-
-            Console.Write("Nhập mật khẩu mới: ");
-            string newPassword = Console.ReadLine();
-
-            // Cập nhật mật khẩu mới trong dữ liệu
-            for (int i = 0; i < dataLines.Count; i++)
-            {
-                if (dataLines[i].Contains(username) && dataLines[i].Contains(oldPassword))
-                {
-                    string[] userDataParts = dataLines[i].Split(',');
-                    userDataParts[2] = newPassword;
-                    dataLines[i] = string.Join(",", userDataParts);
-                    break;
+                    Console.WriteLine("Không tìm thấy phim phù hợp.");
                 }
             }
-
-            // Ghi lại dữ liệu vào tệp
-            File.WriteAllLines(dataFilePath, dataLines);
-            Console.WriteLine("Đổi mật khẩu thành công.");
-            Console.ReadLine(); // Wait for user input
+            catch (FileNotFoundException)
+            {
+                Console.WriteLine("File không tồn tại.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Đã xảy ra lỗi: {ex.Message}");
+            }
         }
     }
 }
