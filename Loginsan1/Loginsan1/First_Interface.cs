@@ -9,6 +9,7 @@ namespace Loginsan1
 {
     internal class First_Interface
     {
+        // Đọc dữ liệu từ file và lưu nó vào biến mảng tạm database
         public static List<List<string>> Read_File(string filepath)
         {
             List<List<string>> database = new List<List<string>>();
@@ -17,14 +18,14 @@ namespace Loginsan1
                 string line;
                 while ((line = sr.ReadLine()) != null)
                 {
-                    string[] values = line.Split(',');
-                    List<string> dbphu = new List<string>(values);
+                    List<string> dbphu = new List<string>(line.Split(','));
                     database.Add(dbphu);
                 }
             }
             return database;
         }
 
+        // Thực hiện việc in vào file từ một mảng sau khi thực hiện chỉnh sửa gì đó trong mảng tạm
         public static void Print_Loop_File(List<List<string>> db, string filepath)
         {
             using (StreamWriter st = new StreamWriter(filepath))
@@ -58,11 +59,15 @@ namespace Loginsan1
                 switch (choice1)
                 {
                     case 0:
+                        // Nhận giá trị trả về là true hoặc false khi chạy hàm Dang_Nhap
                         accessauthority = DangNhap(filepath, rowC, database,ref TenNguoiDung, ref AccountId);
                         Console.Clear();
+                        // Gán giá trị string được lấy từ hàm Dang_Nhap
                         if (accessauthority) accountnotify = $"{AccountId} - {TenNguoiDung} - Authority is Admin";
                         else accountnotify = $"{AccountId} - {TenNguoiDung} - Authority is User";
+                        // Cập nhập giá trị logintime vào file
                         Print_Loop_File(database, filepath);
+                        // một biến bool dùng để chuyển sang chức năng tiếp theo
                         gate_next = true;
                         break;
                     case 1:
@@ -79,6 +84,9 @@ namespace Loginsan1
                 Console.WriteLine($"Error: {ex.Message}");
             }
         }
+        // Hàm chạy chức năng Đăng Ký
+        // Yêu cầu người dùng nhập hai giá trị vào hai biến: Username, Password
+        // Đồng thời gán những giá trị cơ sở khi tạo một tài khoản mới
         public static void DangKy(string filepath, int rowC, List<List<string>> database)
         {
             using (StreamWriter sm = new StreamWriter(filepath, true))
@@ -98,10 +106,17 @@ namespace Loginsan1
             Console.WriteLine("Bạn đã đăng ký thành công. Vui lòng ấn bất kỳ nút nào để thoát ra và thực hiện việc đăng nhập.");
         }
 
+        // Hàm chạy chức năng Đăng Nhập 
+        // Hai biến nhận giá trị nhập vào từ user: Username và Password
+        // Kiểm tra nếu khớp trong mảng tạm thì tiếp tục kiểm tra xem liệu phân quyền khi này là gì
+        // Nếu là Admin tức "A" thì trả về true, không thì trả về false.
+        // Đồng thời tăng giá trị biến logintime trong trường dữ liệu khi đăng nhập vào.
         public static bool DangNhap(string filepath, int rowC, List<List<string>> database, ref string TenNguoiDung, ref string AccountId)
         {
             string Username;
             string Password;
+            // Một biến bool kiểm tra liệu khi username hoặc password hoặc cả hai không thỏa điều kiện thì in ra thông báo lỗi
+            // và bắt nhập lại
             bool errormsgflag = false;
             while (true)
             {
@@ -118,6 +133,7 @@ namespace Loginsan1
                         AccountId = database[i][0];
                         TenNguoiDung = database[i][1];
 
+                        // Thực hiện tăng logintime khi đăng nhập vào bất cứ tài khoản nào.
                         int login_turn = Convert.ToInt32(database[i][3]);
                         login_turn++;
                         database[i][3] = Convert.ToString(login_turn);

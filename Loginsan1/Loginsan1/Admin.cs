@@ -50,9 +50,14 @@ namespace Loginsan1
             }
         }
 
+        // Một hàm lọc User đảm nhiệm lọc theo 4 kiểu: Thời gian đăng nhập (logintime), Số lần bị report(reportime), Số lần review (commenttime),
+        // Nhập trực tiếp một Id muốn xóa.
         private static void Loc_User(List<List<string>> database, List<List<string>> Mangtam, List<List<string>> Mangbin, int b)
         {
             Console.Clear();
+            // Dùng để hiện thị tùy theo từng chức năng, giá trị kiểm tra là b
+            // Tương ứng với vị trị từng biến trong trường dữ liệu
+            // Ví dụ b = 3 tức là vị trí của logintime và tương tự vậy
             string text = "Lọc theo ";
             string text2 = null;
             if (b == 3)
@@ -79,30 +84,35 @@ namespace Loginsan1
 
             while(true)
             {
+                // Nhận giá trị nhập vào từ người dùng, kiểu int
                 int a = Check_Nhapvao.Themdulieu_int(text);
                 int n = 0;
                 for (int i = 0; i < database.Count; i++)
                 {
+                    // Kiểm ta liệu có chuyển kiểu thành công, đưa vào biến n từ giá trị tạm thời trong mảng database
+                    // và phân quyền có phải là user hay không
+                    // Đúng thì chạy tiếp
                     if (int.TryParse(database[i][b], out n) && database[i][6] == "U")
                     {
-                        if (b == 4 && n >= a)
+                        if (b == 4 && n >= a) // Lọc theo reporttime, nếu số lần báo cáo lớn hơn điều kiện, lưu vào mảng Bin
                         {
                             Mangbin.Add(database[i]);
                         }
-                        else if (b == 0 && n == a)
+                        else if (b == 0 && n == a) // Lọc trực tiếp từ giá trị nhận vào Account Id, nếu bằng thì lưu vào mảng Bin
                         {
                             Mangbin.Add(database[i]);
                         }
-                        else if ((b == 3 || b == 5) && n <= a)
+                        else if ((b == 3 || b == 5) && n <= a) // Lọc theo logintime hoặc commenttime, nếu nhỏ hơn điều kiện thì lưu vào mảng Bin
                         {
                             Mangbin.Add(database[i]);
                         }    
                         else Mangtam.Add(database[i]);
                     }
-                    else Mangtam.Add(database[i]);
+                    else Mangtam.Add(database[i]); // Lưu vào mảng tạm
+                    // Mục đích để lưu lại các trường dữ liệu không thỏa điều kiện vào file
                 }
 
-                if (Mangtam.Count < database.Count)
+                if (Mangtam.Count < database.Count) // Thực hiện in thông báo những trường dữ liệu bị xóa, xong rồi break
                 {
                     Console.Clear();
                     Console.WriteLine("Đã xóa thành công, những user bị xóa là: ");
@@ -114,7 +124,7 @@ namespace Loginsan1
                     }
                     break;
                 }
-                else
+                else // Nếu không thì in ra lỗi và bắt nhập lại
                 {
                     Console.Clear();
                     Console.WriteLine("Không có User nào thỏa điều kiện.");

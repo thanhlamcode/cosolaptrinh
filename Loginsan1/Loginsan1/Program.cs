@@ -16,9 +16,14 @@ namespace Loginsan1
         {
             Console.InputEncoding = Encoding.Unicode;
             Console.OutputEncoding = Encoding.Unicode;
+            // gate_next dùng để chuyển sang chức năng khác
+            // gate-end dùng để kết thúc chương trình
             bool gate_next = false;
             bool gate_end = false;
+
+            // Nếu true là phân quyền Admin, false là phân quyền user -> Kết quả được gán dựa vào hàm Dang_Nhap
             bool accessauthority = false;
+            // Giúp người dùng nhận biết Account Id, Username và Phân quyền của mình dễ dàng hơn
             string accountnotify = " ";
             string filepath = @"C:\Users\84967\OneDrive\Máy tính\Truyvan.txt";
 
@@ -37,7 +42,8 @@ namespace Loginsan1
                 while (!gate_next && !gate_end)
                 {
                     Admin.Bin(filepath, accountnotify, ref gate_next, ref gate_end);
-                    Console.ReadKey();
+                    Console.ReadKey(); // Dùng để nhận giá trị nhập vào từ bàn phím user
+                                       // -> Mục đích để hiện thị thông báo sau khi lọc rác thành công
                 }
             }    
             else

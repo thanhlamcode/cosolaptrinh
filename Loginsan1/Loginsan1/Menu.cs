@@ -15,6 +15,7 @@ namespace Loginsan1
         private int SelectedIndex;
         private bool Flag;
 
+        // Khởi tạo một constructor -> Thuận tiện khi tạo một object
         public Menu(string[] options, string prompts, bool flag = true)
         {
             Prompts = prompts;
@@ -23,6 +24,7 @@ namespace Loginsan1
             SelectedIndex = 0;
         }
 
+        // Hàm chạy các lựa chọn
         private void Display()
         {
             int num_title = 2;
@@ -34,6 +36,7 @@ namespace Loginsan1
             }
             else Print_Prompts();
 
+            // In ra dòng có độ dài lớn nhất, làm chuẩn cho việc in ra khung
             for (int i = 0; i < Options.Length; i++)
             {
                 if (Options[i].Length > max) max = Options[i].Length;
@@ -43,14 +46,14 @@ namespace Loginsan1
             string text = null;
             int t2 = Prompts.Split('\n').Length + num_title;
             Console.SetCursorPosition(0, t2);
-            Console.WriteLine('+' + new string('-', 16 + max) + '+');
+            Console.WriteLine('╔' + new string('═', 16 + max) + '╗');
 
             for (int i = 0; i < Options.Length; i++)
             {
                 text = Options[i];
                 char prefix;
                 Console.SetCursorPosition(0, t2 + 1 + i); 
-                Console.Write("|");
+                Console.Write("║");
                 Console.SetCursorPosition(6 , t2 + 1 + i);
                 if (i == SelectedIndex)
                 {
@@ -67,13 +70,14 @@ namespace Loginsan1
                 Console.Write($"{new string(prefix, 2)}--{text}--");
                 Console.SetCursorPosition(17 + max, t2 + 1 + i); 
                 Console.ResetColor();
-                Console.WriteLine("|");
+                Console.WriteLine("║");
             }
 
             Console.SetCursorPosition(0, t2 + Options.Length + 1);
-            Console.WriteLine('+' + new string('-', 16 + max) + '+');
+            Console.WriteLine('╚' + new string('═', 16 + max) + '╝');
         }
 
+        // In ra một tiêu đề bình thường
         private void Print_Prompts()
         {
             int max = 0;
@@ -84,19 +88,19 @@ namespace Loginsan1
             }
 
             Console.SetCursorPosition(0, 0);
-            Console.WriteLine('+' + new string('-', 10 + max) + '+');   
+            Console.WriteLine('╔' + new string('═', 10 + max) + '╗');   
 
                 for (int i = 0; i < Prompts.Split('\n').Length; i++)
             {
                 Console.SetCursorPosition(0, 1 + i);
-                Console.Write("|");
+                Console.Write("║");
                 Console.SetCursorPosition(6, 1 + i);
                 Console.WriteLine($"{Prompts.Split('\n')[i]}");
                 Console.SetCursorPosition(11 + max, 1 + i);
-                Console.WriteLine("|");
+                Console.WriteLine("║");
             }
             Console.SetCursorPosition(0, Prompts.Split('\n').Length + 1);
-            Console.WriteLine('+' + new string('-', 10 + max) + '+');
+            Console.WriteLine('╚' + new string('═', 10 + max) + '╝');
         }
 
         public int Run()
@@ -130,6 +134,7 @@ namespace Loginsan1
             return SelectedIndex;
         }
 
+        // In ra các tiêu đề như: Logo UEH, Logo App, những thứ nhiều ký tự '\n'
         private void Print_title()
         {
             for (int i = 0; i < Prompts.Split('\n').Length; i++)

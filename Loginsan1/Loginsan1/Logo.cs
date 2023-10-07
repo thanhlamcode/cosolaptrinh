@@ -57,22 +57,36 @@ namespace Loginsan1
         {
             string introtext = Logo_UEH();
             string title = Logo_App();
+            // biến bool dùng để dừng một task và chuyển sang task hoặc đoạn code tiếp theo
             bool flag = false;
 
+            // Khởi tạo task1 với Logo "UEH"
+            // Khởi tạo task2 với In ra tên nhóm
             Task t1 = new Task(() => Logo_Print(introtext, ref flag));
             Task t2 = new Task(() => TenNhom(ref flag));
 
-            t1.Start();
-            Waiting_for_you(ref flag);
-            t1.Wait();
-            flag = false;
+            t1.Start(); // Chạy task1
+            Waiting_for_you(ref flag); // Hàm để kiếm tra đến khi thỏa điều kiện thì dừng Task1 lại
+            // Và chuyển sang Task2
+            t1.Wait(); // Đợi task1 thực hiện xong
+            flag = false; // Mục đích dùng để làm điều kiện dừng Task2
             Console.Clear();
-            t2.Start();
-            Waiting_for_you(ref flag);
-            t2.Wait();
+            t2.Start(); // Chạy Task2
+            Waiting_for_you(ref flag);// Hàm để kiếm tra đến khi thỏa điều kiện thì dừng Task2 lại
+            t2.Wait();// Đợi task2 thực hiện xong
+            // Rồi chuyển sang đoạn code tiếp theo
         }
+        // Hàm in ra logo UEH
         private static void Logo_Print(string text, ref bool flag)
         {
+            // Console.Out: Kiểu đại diện cho object đầu ra (output stream) trong console của C#
+            // lock -> Đảm bảo rằng không có thread nào can thiệp việc in ra màn hình của thread khác trong
+            // quá trình đang thực hiện in
+
+            // Đảm bảo rằng chỉ có một thread được phép truy cập vào Console trong một thời điểm
+            // -> Đảm bảo rằng in ra một cách tuần tự và không bị trộn lẫn với đầu ra của thread khác
+
+            // Mục đích: Tránh xung đột dữ liệu
             lock (Console.Out)
             {
                 while (!flag)
@@ -91,6 +105,7 @@ namespace Loginsan1
                     string[] lines = text.Split('\n');
 
                     // Kiểm tra nếu vị trí đặt con trỏ nằm ngoài giới hạn thì không đặt
+                    // Mục đích để tránh bị lỗi khi in ra
                     if (leftMargin > 0 && topMargin > 0 && leftMargin < screenWidth && topMargin < screenHeight)
                     {
                         for (int i = 0; i < lines.Length; i++)
@@ -105,6 +120,7 @@ namespace Loginsan1
             }
         }
 
+        // Hàm in ra tên nhóm
         private static void TenNhom(ref bool flag)
         {
             lock (Console.Out)
@@ -127,22 +143,23 @@ namespace Loginsan1
             }
         }
 
+        // Hàm kiểm tra điều kiện dùng Task
         private static void Waiting_for_you(ref bool flag)
         {
             bool localflag = flag;
-            Task.Delay(2000).ContinueWith(b =>
-            {
+            Task.Delay(2000).ContinueWith(b => // Dừng lại 2 giây rồi đưa biến bool localflag về true
+            {                                  // Mục đích để dừng vòng lặp while bên dưới và chuyển sang Task khác
                 localflag = true;
             });
 
-            while (!localflag)
+            while (!localflag) // Liên tục in ra Logo hoặc tên nhóm
             {
-                if (Console.KeyAvailable)
+                if (Console.KeyAvailable) // Nếu giá trị nhập vào là nút Enter thì chuyển sang Task tiếp theo hoặc đoạn code tiếp theo
                 {
                     var key = Console.ReadKey(intercept: true).Key;
                     if (key == ConsoleKey.Enter)
                     {
-                        localflag = true;
+                        localflag = true; // Dùng vòng lặp while
                     }
                 }
 
