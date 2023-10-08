@@ -51,6 +51,28 @@ namespace Outside_Interface
             }
         }
 
+        public static double DoubleInputWithPrompt(string prompt) // Cho vào Namespace Check_Nhapvao
+        {
+            double result;
+            string input;
+            bool isValid = false;
+
+            do
+            {
+                input = InputWithPrompt(prompt);
+
+                isValid = double.TryParse(input, out result);
+
+                if (!isValid)
+                {
+                    Console.WriteLine("Vui lòng nhập một số thực hợp lệ.");
+                }
+            } while (!isValid);
+
+            return result;
+        }
+
+
         // Hàm dùng để chạy và đưa ra Id cuối cùng
         // Kiểm tra nếu có khoảng trống số Id trong các trường dữ liệu
         // Nếu không có thì tạo Id mới tiếp tục từ trường dữ liệu cuối cùng

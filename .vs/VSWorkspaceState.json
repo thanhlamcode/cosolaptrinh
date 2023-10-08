@@ -1,7 +1,11 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Cinescore",
+    "\\Cinescore\\Cinescore",
+    "\\Cinescore\\Cinescore\\Admin",
+    "\\Cinescore\\Cinescore\\Outside_Interface"
   ],
-  "SelectedNode": "\\C:\\Users\\dtlam\\Source\\Repos\\thanhlamcode",
+  "SelectedNode": "\\Cinescore\\Cinescore.sln",
   "PreviewInSolutionExplorer": false
 }

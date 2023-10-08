@@ -39,9 +39,7 @@ namespace Cinescore
                 // Phần làm admin
                 while (!gate_next && !gate_end)
                 {
-                    Loc_USER.Bin(filepath, accountnotify, ref gate_next, ref gate_end);
-                    Console.ReadKey(); // Dùng để nhận giá trị nhập vào từ bàn phím user
-                                       // -> Mục đích để hiện thị thông báo sau khi lọc rác thành công
+                    Console.WriteLine("I'm free.");
                 }
             }
             else

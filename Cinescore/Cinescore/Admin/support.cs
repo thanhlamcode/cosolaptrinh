@@ -4,14 +4,15 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Outside_Interface;
 
-namespace Admin
+namespace Admin // Tách thành các file con với từng chức năng mẹ
 {
 	public class support
 	{
 		static string dataFilePath = @"C:\Users\dtlam\OneDrive\Documents\Code Làm Nhóm cuối Kì\data.txt";
 
-		static void Hienthidongian()
+		static void Hienthidongian() // Sửa
 		{
 			string[] lines = File.ReadAllLines(dataFilePath, Encoding.Unicode);
 			Console.Clear(); // Xóa màn hình để hiển thị danh sách dễ đọc hơn
@@ -37,7 +38,7 @@ namespace Admin
 			Console.WriteLine("╚════════════════════════════════════════════════════════════════════════════════════════╝");
 		}
 
-		public static void Menuchonlua()
+		public static void Menuchonlua() // Sửa
 		{
 			string[] menuOptions = { "Hiển thị danh sách phim", "Chỉnh sửa thông tin phim", "Thêm phim mới","Lọc user", "Thoát" };
 			string prompts = "Quản lý danh sách phim\n" +
@@ -100,17 +101,18 @@ namespace Admin
 						Menuchonlua();
 						break;
 					case 3:
-						// Xử lý tùy chọn 4
-						Console.WriteLine("Bạn đã chọn Thoát.");
-						check = false;
-						Console.WriteLine("Chương trình đang kết thúc...................");
+						nhan();
 						break;
 					case 4:
 						// lọc rác
 						Loc_USER.Bin(filepath, accountnotify, ref gate_next, ref gate_end);
 						Console.ReadKey(); // Dùng để nhận giá trị nhập vào từ bàn phím user
-										   // -> Mục đích để hiện thị thông báo sau khi lọc rác thành công
-				}
+                                           // -> Mục đích để hiện thị thông báo sau khi lọc rác thành công
+                    case 5:
+                        // Xử lý tùy chọn 4
+                        check = false;
+                        break;
+                }
 			} while (check);
 
 		}
@@ -231,12 +233,12 @@ namespace Admin
 						double rating;
 
 						// Nhập thông tin mới với các hàm Print_Prompts
-						tenphim = InputWithPrompt("Tên phim: ");
-						theloai = InputWithPrompt("Thể loại: ");
-						nhasanxuat = InputWithPrompt("Nhà sản xuất: ");
-						sotap = IntInputWithPrompt("Số tập: ");
-						luotxem = IntInputWithPrompt("Lượt xem: ");
-						doanhthu = IntInputWithPrompt("Doanh thu: ");
+						tenphim = InputWithPrompt("Tên phim: "); // S
+						theloai = InputWithPrompt("Thể loại: "); // S
+						nhasanxuat = InputWithPrompt("Nhà sản xuất: "); // S
+						sotap = IntInputWithPrompt("Số tập: "); // S
+						luotxem = IntInputWithPrompt("Lượt xem: "); // S
+						doanhthu = IntInputWithPrompt("Doanh thu: "); // S
 						rating = DoubleInputWithPrompt("Rating: ");
 
 						// Tạo thông tin phim mới
@@ -277,7 +279,7 @@ namespace Admin
 			return input;
 		}
 
-		static int IntInputWithPrompt(string prompt)
+		static int IntInputWithPrompt(string prompt) // S
 		{
 			int result;
 			string input;
@@ -285,7 +287,7 @@ namespace Admin
 
 			do
 			{
-				input = InputWithPrompt(prompt);
+				input = InputWithPrompt(prompt); // S
 
 				isValid = int.TryParse(input, out result);
 
@@ -298,26 +300,7 @@ namespace Admin
 			return result;
 		}
 
-		static double DoubleInputWithPrompt(string prompt)
-		{
-			double result;
-			string input;
-			bool isValid = false;
-
-			do
-			{
-				input = InputWithPrompt(prompt);
-
-				isValid = double.TryParse(input, out result);
-
-				if (!isValid)
-				{
-					Console.WriteLine("Vui lòng nhập một số thực hợp lệ.");
-				}
-			} while (!isValid);
-
-			return result;
-		}
+		
 
 		static void AddNewMovie()
 		{
@@ -325,16 +308,16 @@ namespace Admin
 			string tenphim, theloai, nhasanxuat;
 
 			// Sử dụng Print_Prompts để hiển thị và nhập dữ liệu
-			tenphim = InputWithPrompt("Tên phim: ");
-			theloai = InputWithPrompt("Thể loại: ");
-			nhasanxuat = InputWithPrompt("Nhà sản xuất: ");
+			tenphim = InputWithPrompt("Tên phim: "); // S 
+			theloai = InputWithPrompt("Thể loại: "); // S
+			nhasanxuat = InputWithPrompt("Nhà sản xuất: "); // S
 
 			int sotap, luotxem, doanhthu;
 			double rating;
 
-			sotap = IntInputWithPrompt("Số tập: ");
-			luotxem = IntInputWithPrompt("Lượt xem: ");
-			doanhthu = IntInputWithPrompt("Doanh thu: ");
+			sotap = IntInputWithPrompt("Số tập: "); // S
+			luotxem = IntInputWithPrompt("Lượt xem: "); // S
+			doanhthu = IntInputWithPrompt("Doanh thu: "); // S
 			rating = DoubleInputWithPrompt("Rating: ");
 
 			// Tạo thông tin phim mới

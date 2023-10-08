@@ -6,6 +6,32 @@ namespace Admin
 {
     public static class CommentManager
     {
+        public static string dataFilePath = @"C:\Users\MyPC\Desktop\đồ án cslt\duanmoi\danhsachcmtid.txt";
+
+        static void nhan() // Đổi tên khác và ghép với Loc_USER
+        {
+            // UIHelper thành Menu lựa chọn, Hiển thị danh sách cmtid, Xoá comment theo Account ID, Thoát 
+            int choice;
+            switch (choice)
+            {
+                case 1:
+                    Console.Clear();
+                    UIHelper.giaodien(); // Sửa
+                    CommentManager.DisplayAllComments();
+                    break;
+
+                case 2:
+                    Console.Clear();
+                    UIHelper.giaodien(); // Sửa
+                    CommentManager.DeleteCommentByAccountId();
+                    break;
+
+                case 3:
+                    Console.WriteLine("Chương trình kết thúc.");
+                    break;
+            }
+        }
+
         public static void DeleteCommentByAccountId()
         {
             Console.Write("Nhập Account ID để hiển thị tất cả các comment và số lần comment: ");
