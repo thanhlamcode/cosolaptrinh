@@ -1,7 +1,0 @@
-C:\Users\dtlam\OneDrive\Documents\Code Làm Nhóm cuối Kì\code\code\obj\Debug\code.csproj.AssemblyReference.cache
-C:\Users\dtlam\OneDrive\Documents\Code Làm Nhóm cuối Kì\code\code\obj\Debug\code.csproj.CoreCompileInputs.cache
-C:\Users\dtlam\OneDrive\Documents\Code Làm Nhóm cuối Kì\code\code\bin\Debug\code.exe.config
-C:\Users\dtlam\OneDrive\Documents\Code Làm Nhóm cuối Kì\code\code\bin\Debug\code.exe
-C:\Users\dtlam\OneDrive\Documents\Code Làm Nhóm cuối Kì\code\code\bin\Debug\code.pdb
-C:\Users\dtlam\OneDrive\Documents\Code Làm Nhóm cuối Kì\code\code\obj\Debug\code.exe
-C:\Users\dtlam\OneDrive\Documents\Code Làm Nhóm cuối Kì\code\code\obj\Debug\code.pdb
