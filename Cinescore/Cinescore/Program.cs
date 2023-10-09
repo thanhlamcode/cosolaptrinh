@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Outside_Interface;
 using Admin;
+using Outside_Interface;
 
 namespace Cinescore
 {
@@ -32,14 +32,13 @@ namespace Cinescore
             {
                 Giao_dien_ngoai.First_I(filepath, title, ref accountnotify, ref accessauthority, ref gate_next, ref gate_end);
             }
-            gate_next = false;
 
             if (accessauthority)
             {
                 // Phần làm admin
-                while (!gate_next && !gate_end)
+                while (!gate_end)
                 {
-                    Console.WriteLine("I'm free.");
+                    Admin_Interface.ProcessSelectedOption(filepath, accountnotify, ref gate_end);
                 }
             }
             else

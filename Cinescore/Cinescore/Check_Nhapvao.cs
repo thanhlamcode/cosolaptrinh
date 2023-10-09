@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Outside_Interface
 {
@@ -53,23 +54,22 @@ namespace Outside_Interface
 
         public static double DoubleInputWithPrompt(string prompt) // Cho vào Namespace Check_Nhapvao
         {
-            double result;
-            string input;
-            bool isValid = false;
-
-            do
+            double num;
+            while (true)
             {
-                input = InputWithPrompt(prompt);
-
-                isValid = double.TryParse(input, out result);
-
-                if (!isValid)
+                Console.Write(prompt);
+                // Kiểm tra liệu giá trị user nhập vào có phải là kiểu int và lớn hơn 0
+                // Nếu đúng điều trên thì trả về giá trị kiểu int không thì chạy qua else bắt nhập lại
+                if (double.TryParse(Console.ReadLine(), out num) && num > 0)
                 {
-                    Console.WriteLine("Vui lòng nhập một số thực hợp lệ.");
+                    return num;
                 }
-            } while (!isValid);
-
-            return result;
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("Giá trị nhập vào không hợp lệ. Vui lòng nhập lại");
+                }
+            }
         }
 
 

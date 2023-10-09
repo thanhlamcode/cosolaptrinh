@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Outside_Interface;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Outside_Interface;
 
-namespace Admin
+namespace Outside_Interface
 {
-    internal class Loc_USER
+    internal class Xoa_User
     {
-        public static void Bin(string filepath, string accountnotify, ref bool gate_next, ref bool gate_end)
+        public static void Bin(string filepath, string accountnotify, ref bool gate_end)
         {
             List<List<string>> database = new List<List<string>>();
             List<List<string>> Mangtam = new List<List<string>>();
@@ -18,7 +18,7 @@ namespace Admin
             {
                 database = Giao_dien_ngoai.Read_File(filepath);
                 string[] option2 = new string[] {"Lọc theo số lần đăng nhập", "Lọc theo số lần bị report",
-                    "Lọc theo số lần comment", "Lọc theo AccountId", "Thoát"};
+                "Lọc theo số lần comment", "Lọc theo AccountId", "Quay Lại"};
                 Menu menu = new Menu(option2, accountnotify + "\n" + "LỌC USER");
                 int choice2 = menu.Run();
                 switch (choice2)
@@ -26,21 +26,25 @@ namespace Admin
                     case 0:
                         Loc_User(database, Mangtam, Mangbin, 3);
                         Giao_dien_ngoai.Print_Loop_File(Mangtam, filepath);
+                        Console.ReadKey(); // Dùng để nhận giá trị nhập vào từ bàn phím user
+                                           // -> Mục đích để hiện thị thông báo sau khi lọc rác thành công
                         break;
                     case 1:
                         Loc_User(database, Mangtam, Mangbin, 4);
                         Giao_dien_ngoai.Print_Loop_File(Mangtam, filepath);
+                        Console.ReadKey();
                         break;
                     case 2:
                         Loc_User(database, Mangtam, Mangbin, 5);
                         Giao_dien_ngoai.Print_Loop_File(Mangtam, filepath);
+                        Console.ReadKey();
                         break;
                     case 3:
                         Loc_User(database, Mangtam, Mangbin, 0);
                         Giao_dien_ngoai.Print_Loop_File(Mangtam, filepath);
+                        Console.ReadKey();
                         break;
                     case 4:
-                        gate_end = true;
                         break;
                 }
             }
@@ -109,7 +113,7 @@ namespace Admin
                         else Mangtam.Add(database[i]);
                     }
                     else Mangtam.Add(database[i]); // Lưu vào mảng tạm
-                    // Mục đích để lưu lại các trường dữ liệu không thỏa điều kiện vào file
+                                                   // Mục đích để lưu lại các trường dữ liệu không thỏa điều kiện vào file
                 }
 
                 if (Mangtam.Count < database.Count) // Thực hiện in thông báo những trường dữ liệu bị xóa, xong rồi break

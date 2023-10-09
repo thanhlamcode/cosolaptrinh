@@ -25,58 +25,65 @@ namespace Outside_Interface
         // Hàm chạy các lựa chọn
         private void Display()
         {
-            int num_title = 2;
-            int max = 0;
-            if (!Flag)
+            try 
             {
-                Print_title();
-                num_title = 0;
-            }
-            else Print_Prompts();
-
-            // In ra dòng có độ dài lớn nhất, làm chuẩn cho việc in ra khung
-            for (int i = 0; i < Options.Length; i++)
-            {
-                if (Options[i].Length > max) max = Options[i].Length;
-                else continue;
-            }
-
-            string text = null;
-            int t2 = Prompts.Split('\n').Length + num_title;
-            Console.SetCursorPosition(0, t2);
-            Console.WriteLine('╔' + new string('═', 16 + max) + '╗');
-
-            for (int i = 0; i < Options.Length; i++)
-            {
-                text = Options[i];
-                char prefix;
-                Console.SetCursorPosition(0, t2 + 1 + i);
-                Console.Write("║");
-                Console.SetCursorPosition(6, t2 + 1 + i);
-                if (i == SelectedIndex)
+                int num_title = 2;
+                int max = 0;
+                if (!Flag)
                 {
-                    prefix = '>';
-                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    Console.BackgroundColor = ConsoleColor.White;
+                    Print_title();
+                    num_title = 0;
                 }
-                else
-                {
-                    prefix = ' ';
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.BackgroundColor = ConsoleColor.Black;
-                }
-                Console.Write($"{new string(prefix, 2)}--{text}--");
-                Console.SetCursorPosition(17 + max, t2 + 1 + i);
-                Console.ResetColor();
-                Console.WriteLine("║");
-            }
+                else Print_Prompts();
 
-            Console.SetCursorPosition(0, t2 + Options.Length + 1);
-            Console.WriteLine('╚' + new string('═', 16 + max) + '╝');
+                // In ra dòng có độ dài lớn nhất, làm chuẩn cho việc in ra khung
+                for (int i = 0; i < Options.Length; i++)
+                {
+                    if (Options[i].Length > max) max = Options[i].Length;
+                    else continue;
+                }
+
+                string text = null;
+                int t2 = Prompts.Split('\n').Length + num_title;
+                Console.SetCursorPosition(0, t2);
+                Console.WriteLine('╔' + new string('═', 16 + max) + '╗');
+
+                for (int i = 0; i < Options.Length; i++)
+                {
+                    text = Options[i];
+                    char prefix;
+                    Console.SetCursorPosition(0, t2 + 1 + i);
+                    Console.Write("║");
+                    Console.SetCursorPosition(6, t2 + 1 + i);
+                    if (i == SelectedIndex)
+                    {
+                        prefix = '>';
+                        Console.ForegroundColor = ConsoleColor.DarkYellow;
+                        Console.BackgroundColor = ConsoleColor.White;
+                    }
+                    else
+                    {
+                        prefix = ' ';
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.BackgroundColor = ConsoleColor.Black;
+                    }
+                    Console.Write($"{new string(prefix, 2)}--{text}--");
+                    Console.SetCursorPosition(17 + max, t2 + 1 + i);
+                    Console.ResetColor();
+                    Console.WriteLine("║");
+                }
+
+                Console.SetCursorPosition(0, t2 + Options.Length + 1);
+                Console.WriteLine('╚' + new string('═', 16 + max) + '╝');
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"Error Display: {ex.Message}");
+            }
         }
 
         // In ra một tiêu đề bình thường
-        private void Print_Prompts()
+        public void Print_Prompts()
         {
             int max = 0;
             for (int i = 0; i < Prompts.Split('\n').Length; i++)

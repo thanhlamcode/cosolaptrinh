@@ -1,33 +1,38 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using Outside_Interface;
 
 namespace Admin
 {
-    public static class CommentManager
+    internal class CommentManager
     {
-        public static string dataFilePath = @"C:\Users\MyPC\Desktop\đồ án cslt\duanmoi\danhsachcmtid.txt";
+        public static string dataFilePath = @"C:\Users\84967\OneDrive\Máy tính\danhsachcmtid.txt";
 
-        static void nhan() // Đổi tên khác và ghép với Loc_USER
+        public static void Comment_Control()
         {
             // UIHelper thành Menu lựa chọn, Hiển thị danh sách cmtid, Xoá comment theo Account ID, Thoát 
-            int choice;
+            string[] options_4 = { "Hiển thị tất cả các Comment", "Xóa comment dựa trên User ID", "Quay lại" };
+            string prompts = "Quản Lý Comment của User ID";
+            Menu menu = new Menu(options_4, prompts);
+            int choice = menu.Run();
+
             switch (choice)
             {
+                case 0:
+                    Console.Clear();
+                    DisplayAllComments();
+                    break;
+
                 case 1:
                     Console.Clear();
-                    UIHelper.giaodien(); // Sửa
-                    CommentManager.DisplayAllComments();
+                    DeleteCommentByAccountId();
                     break;
 
                 case 2:
-                    Console.Clear();
-                    UIHelper.giaodien(); // Sửa
-                    CommentManager.DeleteCommentByAccountId();
-                    break;
-
-                case 3:
-                    Console.WriteLine("Chương trình kết thúc.");
                     break;
             }
         }
@@ -38,7 +43,7 @@ namespace Admin
             if (int.TryParse(Console.ReadLine(), out int accountId))
             {
                 // Đọc toàn bộ nội dung từ tệp văn bản vào một danh sách
-                string[] lines = File.ReadAllLines(Program.dataFilePath);
+                string[] lines = File.ReadAllLines(dataFilePath);
 
                 bool found = false;
 
@@ -95,7 +100,7 @@ namespace Admin
         public static void DeleteCommentByCommentId(int commentId, int accountId)
         {
             // Đọc toàn bộ nội dung từ tệp văn bản vào một danh sách
-            string[] lines = File.ReadAllLines(Program.dataFilePath);
+            string[] lines = File.ReadAllLines(dataFilePath);
 
             bool found = false;
 
@@ -121,7 +126,7 @@ namespace Admin
             }
 
             // Ghi dữ liệu mới vào tệp văn bản
-            File.WriteAllText(Program.dataFilePath, newData.ToString());
+            File.WriteAllText(dataFilePath, newData.ToString());
 
             if (found)
             {
@@ -138,7 +143,7 @@ namespace Admin
         public static int CountCommentsByAccountId(int accountId)
         {
             // Đọc toàn bộ nội dung từ tệp văn bản vào một danh sách
-            string[] lines = File.ReadAllLines(Program.dataFilePath);
+            string[] lines = File.ReadAllLines(dataFilePath);
 
             int commentCount = 0;
 
@@ -163,7 +168,7 @@ namespace Admin
         public static void DecreaseCommentCount(int accountId)
         {
             // Đọc toàn bộ nội dung từ tệp văn bản vào một danh sách
-            string[] lines = File.ReadAllLines(Program.dataFilePath);
+            string[] lines = File.ReadAllLines(dataFilePath);
 
             // Tạo một StringBuilder để lưu trữ dữ liệu mới
             StringBuilder newData = new StringBuilder();
@@ -192,15 +197,15 @@ namespace Admin
             }
 
             // Ghi dữ liệu mới vào tệp văn bản
-            File.WriteAllText(Program.dataFilePath, newData.ToString());
+            File.WriteAllText(dataFilePath, newData.ToString());
         }
 
         public static void DisplayAllComments()
         {
             // Đọc toàn bộ nội dung từ tệp văn bản
-            string[] lines = File.ReadAllLines(Program.dataFilePath);
+            string[] lines = File.ReadAllLines(dataFilePath);
 
-            Console.WriteLine("Danh sách tất cả các comments (cmtid, filmid, accountId, cmt):");
+            Console.WriteLine("Danh sách tất cả các comments:");
 
             foreach (string line in lines)
             {

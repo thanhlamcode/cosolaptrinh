@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{47E01D6C-27E5-4C4E-857E-4BF4D04229B7}</ProjectGuid>
+    <ProjectGuid>{03091D09-C0B5-4BCD-9410-BC5B83E7FEF8}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Cinescore</RootNamespace>
     <AssemblyName>Cinescore</AssemblyName>
@@ -43,13 +43,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Admin_Interface.cs" />
     <Compile Include="Check_Nhapvao.cs" />
+    <Compile Include="CommentManager.cs" />
     <Compile Include="Giao_dien_ngoai.cs" />
-    <Compile Include="Loc_USER.cs" />
     <Compile Include="Logo.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Xoa_User.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
