@@ -19,8 +19,15 @@ namespace User
             List<string> reviews = File.ReadAllLines(filePath1).ToList();
 
             // Khởi tạo một mảng lưu trữ tổng điểm và số lượng đánh giá cho mỗi phim
-            double[] totalRatings = new double[1000]; // Giả sử có tối đa 1000 phim
-            int[] numberOfRatings = new int[1000]; // Giả sử có tối đa 1000 phim
+            List<double> totalRatings = new List<double>();
+            List<int> numberOfRatings = new List<int>();
+
+            // Khởi tạo danh sách với các giá trị mặc định
+            for (int i = 0; i < reviews.Capacity; i++)
+            {
+                totalRatings.Add(0.0);
+                numberOfRatings.Add(0);
+            }
 
             foreach (string review in reviews)
             {
