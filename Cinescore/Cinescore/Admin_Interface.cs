@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Outside_Interface;
-
+using User;
 
 namespace Admin
 {
@@ -106,10 +106,9 @@ namespace Admin
             Console.WriteLine("╝");
         }
         
-        public static void EditMovie(int filmid)
+        public static void EditMovie(int F_id, string thongbao, List<string> mangtam)
         {
             string[] lines = File.ReadAllLines(dataFilePath, Encoding.Unicode);
-            bool found = false;
 
             for (int i = 0; i < lines.Length; i++)
             {
@@ -117,24 +116,9 @@ namespace Admin
                 if (parts.Length >= 8)
                 {
                     int existingFilmid;
-                    if (int.TryParse(parts[0], out existingFilmid) && existingFilmid == filmid)
+                    if (int.TryParse(parts[0], out existingFilmid) && existingFilmid == F_id)
                     {
-                        found = true;
-                        Console.WriteLine("Thông tin hiện tại của bộ phim:");
-                        Console.WriteLine(new string('═', 60)); // In đường kẻ ngang
-                        Console.WriteLine();
-
-                        Print_Prompts("Film ID:", parts[0]);
-                        Print_Prompts("Tên phim:", parts[1]);
-                        Print_Prompts("Thể loại:", parts[2]);
-                        Print_Prompts("Nhà sản xuất:", parts[3]);
-                        Print_Prompts("Số tập:", parts[4]);
-                        Print_Prompts("Lượt xem:", parts[5]);
-                        Print_Prompts("Doanh thu:", parts[6]);
-                        Print_Prompts("Rating:", parts[7]);
-
-                        Console.WriteLine();
-                        Console.WriteLine(new string('═', 60)); // In đường kẻ ngang
+                        Search_Film.Print_Normal("Thông tin hiện tại của phim:\n" + thongbao);
                         Console.WriteLine("Nhập các thông tin mới:");
 
                         string tenphim, theloai, nhasanxuat;
@@ -151,7 +135,7 @@ namespace Admin
                         rating = Check_Nhapvao.DoubleInputWithPrompt("Rating: ");
 
                         // Tạo thông tin phim mới
-                        string newMovieInfo = $"{filmid},{tenphim},{theloai},{nhasanxuat},{sotap},{luotxem},{doanhthu},{rating}";
+                        string newMovieInfo = $"{F_id},{tenphim},{theloai},{nhasanxuat},{sotap},{luotxem},{doanhthu},{rating}";
 
                         // Cập nhật thông tin phim trong danh sách
                         lines[i] = newMovieInfo;
@@ -163,11 +147,6 @@ namespace Admin
                         Console.WriteLine("Thông tin hiện tại của bộ phim sau chỉnh sửa!");
                     }
                 }
-            }
-
-            if (!found)
-            {
-                Console.WriteLine("Filmid không tồn tại trong danh sách.");
             }
         }
 

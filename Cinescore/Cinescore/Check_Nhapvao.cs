@@ -31,7 +31,7 @@ namespace Outside_Interface
         }
 
         // Dùng để nhận một int nhập vào từ người dùng
-        public static int Themdulieu_int(string text)
+        public static int Themdulieu_int(string text, int num_dk = 0)
         {
             int num;
             while (true)
@@ -39,7 +39,7 @@ namespace Outside_Interface
                 Console.Write(text);
                 // Kiểm tra liệu giá trị user nhập vào có phải là kiểu int và lớn hơn 0
                 // Nếu đúng điều trên thì trả về giá trị kiểu int không thì chạy qua else bắt nhập lại
-                if (int.TryParse(Console.ReadLine(), out num) && num > 0)
+                if (int.TryParse(Console.ReadLine(), out num) && num > num_dk)
                 {
                     return num;
                 }
@@ -51,18 +51,20 @@ namespace Outside_Interface
             }
         }
 
-        public static double DoubleInputWithPrompt(string prompt) // Cho vào Namespace Check_Nhapvao
+        public static double DoubleInputWithPrompt(string prompt, int a = 0, int b = 0, bool flag = false) // Cho vào Namespace Check_Nhapvao
         {
             double num;
             while (true)
             {
                 Console.Write(prompt);
-                // Kiểm tra liệu giá trị user nhập vào có phải là kiểu int và lớn hơn 0
-                // Nếu đúng điều trên thì trả về giá trị kiểu int không thì chạy qua else bắt nhập lại
-                if (double.TryParse(Console.ReadLine(), out num) && num > 0)
+                if (double.TryParse(Console.ReadLine(), out num) && num > 0 && !flag)
+                {
+                    return num;  
+                }
+                else if(dk_double(num, a, b) && flag)
                 {
                     return num;
-                }
+                }    
                 else
                 {
                     Console.Clear();
@@ -71,7 +73,11 @@ namespace Outside_Interface
             }
         }
 
-
+        private static bool dk_double(double n, int a, int b)
+        {
+            if (n >= a && n <= b) return true;
+            else return false;
+        }
         // Hàm dùng để chạy và đưa ra Id cuối cùng
         // Kiểm tra nếu có khoảng trống số Id trong các trường dữ liệu
         // Nếu không có thì tạo Id mới tiếp tục từ trường dữ liệu cuối cùng

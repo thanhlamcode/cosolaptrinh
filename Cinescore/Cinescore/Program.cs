@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Admin;
 using Outside_Interface;
+using User;
 
 namespace Cinescore
 {
@@ -23,6 +24,7 @@ namespace Cinescore
             bool accessauthority = false;
             // Giúp người dùng nhận biết Account Id, Username và Phân quyền của mình dễ dàng hơn
             string accountnotify = " ";
+            int ac_Id = 0;
             string filepath = @"C:\Users\84967\OneDrive\Máy tính\Truyvan.txt";
 
             string title = Logo.Logo_App();
@@ -30,7 +32,8 @@ namespace Cinescore
 
             while (!gate_next && !gate_end)
             {
-                Giao_dien_ngoai.First_I(filepath, title, ref accountnotify, ref accessauthority, ref gate_next, ref gate_end);
+                Giao_dien_ngoai.First_I(filepath, title, ref accountnotify, ref accessauthority, 
+                    ref gate_next, ref gate_end, ref ac_Id);
             }
 
             if (accessauthority)
@@ -43,7 +46,10 @@ namespace Cinescore
             }
             else
             {
-                // Phần làm User
+                while(!gate_end)
+                {
+                    Search_Film.ProcessSelectedOption(ref gate_end, ac_Id);
+                }    
             }
         }
     }

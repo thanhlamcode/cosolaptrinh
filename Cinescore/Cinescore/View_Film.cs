@@ -6,37 +6,21 @@ using System.Text;
 using System.Threading.Tasks;
 using Outside_Interface;
 
-namespace Admin
+namespace User
 {
-    internal class Xem_Phim
+    internal class View_Film
     {
-        static string dataFilePath = @"C:\Users\84967\OneDrive\Máy tính\data.txt";
-
-        public static void DisplayAllMovieNames(int edit_num = 0)
+        public static void User_Hienthi_Film(List<List<string>> mangtam, int ac_Id)
         {
-            string[] lines = File.ReadAllLines(dataFilePath, Encoding.Unicode);
-            List<List<string>> mangtam = new List<List<string>>();
-            string prompts = null;
             bool display_movie = false;
-
-            for (int i = 0; i < lines.Length; i++)
-            {
-                string[] movieData = lines[i].Split(',');
-                List<string> m_1 = new List<string>(movieData);
-
-                // Kiểm tra xem có đủ thông tin để hiển thị film ID và tên phim không
-                if (movieData.Length > 0)
-                {
-                    string filmId = movieData[0];
-                    string movieName = movieData[1];
-                    mangtam.Add(m_1);
-                    prompts += $"{filmId}: {movieName}";
-                    if (i + 1 < lines.Length) prompts += "\n";
-                }
-            }
-
-            string[] menuOptions = { "Trước", "Tiếp", "Chọn Danh sách", "Quay lại"};
+            string prompts = null;
+            string[] menuOptions = { "Trước", "Tiếp", "Chọn Danh sách", "Quay lại" };
             int film_max = 0;
+            for(int i = 0; i < mangtam.Count; i++)
+            {
+                prompts += $"Phim Id: {mangtam[i][0]} Tên Phim: {mangtam[i][1]}";
+                if (i + 1 < mangtam.Count) prompts += "\n";
+            }    
             if (prompts.Split('\n').Length > 20) film_max = 20;
 
             Menu menu = new Menu(menuOptions, prompts);
@@ -64,19 +48,18 @@ namespace Admin
                         }
                         break;
                     case 2:
-                        Ham_moi(mangtam, prompts, film_max, edit_num);
+                        Ham_moi(mangtam, prompts, film_max, ac_Id);
                         Console.ReadLine();
-                        mangtam.Clear();
                         break;
                     case 3:
                         display_movie = true;
                         break;
 
                 }
-            }       
+            }
         }
 
-        static void Ham_moi(List<List<string>> mangtam, string text, int film_max,int edit_num)
+        static void Ham_moi(List<List<string>> mangtam, string text, int film_max, int ac_Id)
         {
             List<string> movieOptions = new List<string>();
             int rac = 0;
@@ -96,16 +79,35 @@ namespace Admin
             // Xử lý khi người dùng đã chọn một bộ phim
             if (selectedIndex >= 0 && selectedIndex < movieOptions.Count)
             {
+                string F_id = mangtam[selectedIndex][0];
                 string thongbao = null;
-                int F_id = Convert.ToInt32(mangtam[selectedIndex][0]);
                 thongbao = $"Phim Id: {mangtam[selectedIndex][0]}\nTên Phim: {mangtam[selectedIndex][1]}\n" +
                     $"Thể loại: {mangtam[selectedIndex][2]}\nNhà sản xuất: {mangtam[selectedIndex][3]}\n" +
                     $"Số tập: {Convert.ToInt32(mangtam[selectedIndex][4])}\nLượt Xem: {Convert.ToInt32(mangtam[selectedIndex][5])}\n" +
                     $"Doanh Thu: {Convert.ToInt32(mangtam[selectedIndex][6])}\nRating: {Convert.ToDouble(mangtam[selectedIndex][7])}";
+                Menu_Film_User_D(thongbao, ac_Id, F_id);
+            }
+        }
 
-                if (edit_num == 0) Admin_Interface.ShowMovieDetails(thongbao);
-                else Admin_Interface.EditMovie(F_id, thongbao, mangtam[selectedIndex]);
-                Console.ReadLine();
+        static void Menu_Film_User_D(string prompts, int ac_Id, string F_id)
+        {
+            string[] options_1 = {"Thêm Review", "Xem tất cả review", "Quay lại"};
+            int rac = 0;
+            Menu menu = new Menu(options_1, prompts);
+            int choice = menu.Run(ref rac);
+
+            switch (choice)
+            {
+                case 0:
+                    Console.Clear();
+                    For_User_Comment.AddReview(F_id, ac_Id); ; // truyền filmid, account Id
+                    break;
+                case 1:
+                    Console.Clear();
+                    For_User_Comment.ViewReview(F_id);
+                    break;
+                case 2:
+                    break;
             }
         }
     }

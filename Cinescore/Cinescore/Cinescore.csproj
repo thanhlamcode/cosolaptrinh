@@ -46,11 +46,15 @@
     <Compile Include="Admin_Interface.cs" />
     <Compile Include="Check_Nhapvao.cs" />
     <Compile Include="CommentManager.cs" />
+    <Compile Include="For_User_Comment.cs" />
     <Compile Include="Giao_dien_ngoai.cs" />
     <Compile Include="Logo.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Report_A_Password.cs" />
+    <Compile Include="Search_Film.cs" />
+    <Compile Include="View_Film.cs" />
     <Compile Include="Xem_Phim.cs" />
     <Compile Include="Xoa_User.cs" />
   </ItemGroup>

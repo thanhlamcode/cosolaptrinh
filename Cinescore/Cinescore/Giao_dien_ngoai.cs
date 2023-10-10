@@ -42,7 +42,8 @@ namespace Outside_Interface
                 }
             }
         }
-        public static void First_I(string filepath, string title, ref string accountnotify, ref bool accessauthority, ref bool gate_next, ref bool gate_end)
+        public static void First_I(string filepath, string title, ref string accountnotify, ref bool accessauthority, 
+            ref bool gate_next, ref bool gate_end, ref int ac_Id)
         {
             List<List<string>> database = new List<List<string>>();
             string TenNguoiDung = " ";
@@ -67,6 +68,7 @@ namespace Outside_Interface
                         // Gán giá trị string được lấy từ hàm Dang_Nhap
                         if (accessauthority) accountnotify = $"{AccountId} - {TenNguoiDung} - Authority is Admin";
                         else accountnotify = $"{AccountId} - {TenNguoiDung} - Authority is User";
+                        ac_Id = Convert.ToInt32(AccountId);
                         // Cập nhập giá trị logintime vào file
                         Print_Loop_File(database, filepath);
                         // một biến bool dùng để chuyển sang chức năng tiếp theo
