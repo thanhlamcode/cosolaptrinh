@@ -1,60 +1,87 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace QuerySystemIO
+namespace Hieu
 {
-    class Program
+    class ReportAndPassword
     {
-        static string dataFilePath = @"C:\Users\HP\OneDrive\Tài liệu\N\n.txt"; // Đường dẫn đến tệp văn bản chứa dữ liệu
+        static string dataFilePath = @"D:\code\vs - C#\gr_project\new proj\n.txt"; // Đường dẫn đến tệp văn bản chứa dữ liệu
 
-        static void Main(string[] args)
+        static void Print_Prompts(string label, string value)
         {
-            Console.OutputEncoding = Encoding.UTF8;
-            Console.InputEncoding = Encoding.Unicode;
+            int t1 = (Console.WindowWidth - 60) / 2;
+            int mid_2 = (50 - (label.Length + value.Length)) / 2;
+
+            Console.SetCursorPosition(t1, Console.CursorTop);
+            Console.Write("║");
+            Console.SetCursorPosition(t1 + 6 + mid_2, Console.CursorTop);
+            Console.Write($"{label} {value}");
+            Console.SetCursorPosition(t1 + 59, Console.CursorTop);
+            Console.WriteLine("║");
+        }
+
+        static void Menuchonlua()
+        {
+            string[] menuOptions = { "Thêm báo cáo bình luận", "Đổi mật khẩu người dùng", "Thoát chương trình" };
+            string prompts = "Chương trình truy vấn dữ liệu\n" +
+                             "Chọn tùy chọn:";
+
+            Menu menu = new Menu(menuOptions, prompts);
+            int selectedIndex = menu.Run();
+
+            ProcessSelectedOption(selectedIndex);
+
+            Console.WriteLine("Nhấn phím bất kỳ để thoát.");
+            Console.ReadKey();
+        }
+
+        static void ProcessSelectedOption(int selectedIndex)
+        {
+            bool check = true;
             List<string> dataLines = File.ReadAllLines(dataFilePath).ToList();
-
-            while (true)
+            do
             {
-                Console.Clear();
-                Console.WriteLine("╔════════════════════════════════════════════════╗");
-                Console.WriteLine("║          Chương trình truy vấn dữ liệu         ║");
-                Console.WriteLine("╠════════════════════════════════════════════════╣");
-                Console.WriteLine("║    1. Thêm báo cáo bình luận                   ║");
-                Console.WriteLine("║    2. Đổi mật khẩu người dùng                  ║");
-                Console.WriteLine("║    0. Thoát chương trình                       ║");
-                Console.WriteLine("╚════════════════════════════════════════════════╝");
-                Console.Write("Vui lòng chọn một tùy chọn: ");
-                int option = Convert.ToInt32(Console.ReadLine());
-
-                switch (option)
+                switch (selectedIndex)
                 {
-                    case 1:
+                    case 0:
+                        // Xử lý tùy chọn 1
+                        Console.Clear();
                         AddCommentReport(dataLines);
+                        Console.ReadLine();
+                        Menuchonlua();
+                        break;
+                    case 1:
+                        // Xử lý tùy chọn 2
+                        Console.Clear();
+                        ChangeUserPassword(dataLines);
+                        Console.ReadLine();
+                        Menuchonlua();
                         break;
                     case 2:
-                        ChangeUserPassword(dataLines);
-                        break;
-                    case 0:
-                        Environment.Exit(0);
-                        break;
-                    default:
-                        Console.WriteLine("Lựa chọn không hợp lệ. Vui lòng thử lại.");
+                        // Xử lý tùy chọn 3
+                        Console.WriteLine("Bạn đã chọn Thoát.");
+                        check = false;
+                        Console.WriteLine("Chương trình đang kết thúc...................");
                         break;
                 }
-
-                Console.WriteLine();
             }
+            while (check);
+        }
+
+        static void Main()
+        {
+            Console.OutputEncoding = Encoding.Unicode;
+            Console.InputEncoding = Encoding.Unicode;
+            Menuchonlua();
         }
 
         static void AddCommentReport(List<string> dataLines)
         {
             Console.Clear();
-            Console.WriteLine("╔════════════════════════════════════════════════╗");
-            Console.WriteLine("║             Thêm báo cáo bình luận             ║");
-            Console.WriteLine("╚════════════════════════════════════════════════╝");
+            Print_Prompts("Thêm báo cáo bình luận ", "");
             string username = "";
 
             do
@@ -87,7 +114,6 @@ namespace QuerySystemIO
                     File.WriteAllLines(dataFilePath, dataLines);
 
                     Console.WriteLine("Báo cáo bình luận thành công.");
-                    Console.ReadLine(); // Wait for user input
                     return;
                 }
 
@@ -98,9 +124,7 @@ namespace QuerySystemIO
         static void ChangeUserPassword(List<string> dataLines)
         {
             Console.Clear();
-            Console.WriteLine("╔════════════════════════════════════════════════╗");
-            Console.WriteLine("║            Đổi mật khẩu người dùng             ║");
-            Console.WriteLine("╚════════════════════════════════════════════════╝");
+            Print_Prompts("Đổi mật khẩu người dùng", "");
             string username = "";
 
             while (true)
@@ -147,7 +171,9 @@ namespace QuerySystemIO
             // Ghi lại dữ liệu vào tệp
             File.WriteAllLines(dataFilePath, dataLines);
             Console.WriteLine("Đổi mật khẩu thành công.");
-            Console.ReadLine(); // Wait for user input
+            Print_Prompts("Tên người dùng: ", username);
+            Print_Prompts("Mật khẩu mới: ", newPassword);
         }
     }
+
 }
