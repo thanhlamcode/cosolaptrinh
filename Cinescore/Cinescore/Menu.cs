@@ -14,16 +14,17 @@ namespace Outside_Interface
         private bool Flag;
 
         // Khởi tạo một constructor -> Thuận tiện khi tạo một object
-        public Menu(string[] options, string prompts, bool flag = true)
+        public Menu(string[] options, string prompts, bool flag = true, int selected_in = 0)
         {
             Prompts = prompts;
             Flag = flag;
             Options = options;
-            SelectedIndex = 0;
+            SelectedIndex = selected_in;
         }
 
         // Hàm chạy các lựa chọn
-        private void Display()
+        private void Display(int film_max) // Cơ chế hiển thị tiếp -> Nếu chạm mức giới hạn -> Trả về số tới giới hạn = dòng cuối + 4
+            // In ra thông báo lựa chọn thứ dòng cuối + 1 để chuyển sang hiển thị tiếp
         {
             try 
             {
@@ -34,7 +35,10 @@ namespace Outside_Interface
                     Print_title();
                     num_title = 0;
                 }
-                else Print_Prompts();
+                else Print_Prompts(film_max);
+
+                if (film_max == 0) film_max = Prompts.Split('\n').Length;
+                else film_max = 20;
 
                 // In ra dòng có độ dài lớn nhất, làm chuẩn cho việc in ra khung
                 for (int i = 0; i < Options.Length; i++)
@@ -44,7 +48,7 @@ namespace Outside_Interface
                 }
 
                 string text = null;
-                int t2 = Prompts.Split('\n').Length + num_title;
+                int t2 = film_max + num_title;
                 Console.SetCursorPosition(0, t2);
                 Console.WriteLine('╔' + new string('═', 16 + max) + '╗');
 
@@ -83,10 +87,14 @@ namespace Outside_Interface
         }
 
         // In ra một tiêu đề bình thường
-        public void Print_Prompts()
+        private void Print_Prompts(int film_max)
         {
             int max = 0;
-            for (int i = 0; i < Prompts.Split('\n').Length; i++)
+            int start_film = 0;
+            int a = 0;
+            if (film_max > 0) start_film = film_max - 20;
+            else film_max = Prompts.Split('\n').Length;
+            for (int i = start_film; i < film_max; i++)
             {
                 if (Prompts.Split('\n')[i].Length > max) max = Prompts.Split('\n')[i].Length;
                 else continue;
@@ -95,26 +103,27 @@ namespace Outside_Interface
             Console.SetCursorPosition(0, 0);
             Console.WriteLine('╔' + new string('═', 10 + max) + '╗');
 
-            for (int i = 0; i < Prompts.Split('\n').Length; i++)
+            for (int i = start_film; i < film_max; i++)
             {
-                Console.SetCursorPosition(0, 1 + i);
+                Console.SetCursorPosition(0, 1 + a);
                 Console.Write("║");
-                Console.SetCursorPosition(6, 1 + i);
+                Console.SetCursorPosition(6, 1 + a);
                 Console.WriteLine($"{Prompts.Split('\n')[i]}");
-                Console.SetCursorPosition(11 + max, 1 + i);
+                Console.SetCursorPosition(11 + max, 1 + a);
                 Console.WriteLine("║");
+                a++;
             }
-            Console.SetCursorPosition(0, Prompts.Split('\n').Length + 1);
+            Console.SetCursorPosition(0, film_max - start_film + 1);
             Console.WriteLine('╚' + new string('═', 10 + max) + '╝');
         }
 
-        public int Run()
+        public int Run(ref int film_max)
         {
             ConsoleKey Keypress;
             do
             {
                 Console.Clear();
-                Display();
+                Display(film_max);
                 var key = Console.ReadKey(intercept: true).Key;
                 Keypress = key;
 

@@ -20,7 +20,8 @@ namespace Outside_Interface
                 string[] option2 = new string[] {"Lọc theo số lần đăng nhập", "Lọc theo số lần bị report",
                 "Lọc theo số lần comment", "Lọc theo AccountId", "Quay Lại"};
                 Menu menu = new Menu(option2, accountnotify + "\n" + "LỌC USER");
-                int choice2 = menu.Run();
+                int rac = 0;
+                int choice2 = menu.Run(ref rac);
                 switch (choice2)
                 {
                     case 0:

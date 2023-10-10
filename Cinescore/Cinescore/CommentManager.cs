@@ -17,8 +17,9 @@ namespace Admin
             // UIHelper thành Menu lựa chọn, Hiển thị danh sách cmtid, Xoá comment theo Account ID, Thoát 
             string[] options_4 = { "Hiển thị tất cả các Comment", "Xóa comment dựa trên User ID", "Quay lại" };
             string prompts = "Quản Lý Comment của User ID";
+            int rac = 0;
             Menu menu = new Menu(options_4, prompts);
-            int choice = menu.Run();
+            int choice = menu.Run(ref rac);
 
             switch (choice)
             {

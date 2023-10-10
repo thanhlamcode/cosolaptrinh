@@ -55,7 +55,8 @@ namespace Outside_Interface
 
                 string[] option1 = new string[] { "Đăng Nhập", " Đăng Ký ", "  Thoát  " };
                 Menu menu = new Menu(option1, title, false);
-                int choice1 = menu.Run();
+                int rac = 0;
+                int choice1 = menu.Run(ref rac);
 
                 switch (choice1)
                 {

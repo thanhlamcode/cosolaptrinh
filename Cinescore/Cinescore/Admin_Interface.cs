@@ -13,69 +13,25 @@ namespace Admin
     {
         static string dataFilePath = @"C:\Users\84967\OneDrive\Máy tính\data.txt";
 
-        static void Hienthidongian() // Sửa
-        {
-            string[] lines = File.ReadAllLines(dataFilePath, Encoding.Unicode);
-            Console.Clear(); // Xóa màn hình để hiển thị danh sách dễ đọc hơn
-            Console.WriteLine("╔════════════════════════════════════════════════════════════════════════════════════════╗");
-            Console.WriteLine("║                          Danh sách tất cả các tên phim cùng với filmid:                ║");
-            Console.WriteLine("╠════════════════════════════════════════════════════════════════════════════════════════╣");
-
-            for (int i = 0; i < lines.Length; i++)
-            {
-                string line = lines[i];
-                string[] parts = line.Split(',');
-                if (parts.Length >= 2)
-                {
-                    int filmid;
-                    if (int.TryParse(parts[0], out filmid))
-                    {
-                        string tenphim = parts[1];
-                        Console.WriteLine($"║  Film ID: {filmid,-10}║ Tên phim: {tenphim,-55}║");
-                    }
-                }
-            }
-
-            Console.WriteLine("╚════════════════════════════════════════════════════════════════════════════════════════╝");
-        }
-
         public static void ProcessSelectedOption(string filepath, string accountnotify, ref bool gate_end)
         {
             string[] menuOptions = { "Hiển thị danh sách phim", "Chỉnh sửa thông tin phim", "Thêm phim mới",
                 "Quản Lý Comment của User", "Lọc user", "Thoát" };
             string prompts = accountnotify + "\n" + "GIAO DIỆN ADMIN";
+            int rac = 0;
 
             Menu menu = new Menu(menuOptions, prompts);
-            int selectedIndex = menu.Run();
+            int selectedIndex = menu.Run(ref rac);
 
             switch (selectedIndex)
             {
                 case 0:
                     Console.Clear();
-                    DisplayAllMovieNames();
-                    Console.ReadLine();
+                    Xem_Phim.DisplayAllMovieNames();
                     break;
                 case 1:
-                    Hienthidongian();
-
-                    int filmid;
-                    bool isNumeric = false;
-
-                    do
-                    {
-                        Console.Write("Nhập filmid của bản ghi bạn muốn chỉnh sửa: ");
-                        string input = Console.ReadLine();
-
-                        isNumeric = int.TryParse(input, out filmid);
-
-                        if (!isNumeric)
-                        {
-                            Console.WriteLine("Vui lòng nhập một số nguyên hợp lệ.");
-                        }
-                    } while (!isNumeric);
-
-                    EditMovie(filmid);
-                    Console.ReadLine();
+                    Console.Clear();
+                    Xem_Phim.DisplayAllMovieNames(1);
                     break;
                 case 2:
                     Console.Clear();
@@ -95,45 +51,7 @@ namespace Admin
                     break;
             }
         }
-
-        static void DisplayAllMovieNames()
-        {
-            string[] lines = File.ReadAllLines(dataFilePath, Encoding.Unicode);
-            List<string> movieOptions = new List<string>(); 
-
-
-            Console.WriteLine("Danh sách tất cả các tên phim cùng với film ID:\n");
-
-            for (int i = 0; i < lines.Length; i++)
-            {
-                string line = lines[i];
-                string[] movieData = line.Split(',');
-
-                // Kiểm tra xem có đủ thông tin để hiển thị film ID và tên phim không
-                if (movieData.Length >= 2)
-                {
-                    string filmId = movieData[0];
-                    string movieName = movieData[1];
-
-                    movieOptions.Add($"{filmId}: {movieName}");
-                }
-            }
-
-            string[] menuOptions = movieOptions.ToArray();
-            string prompts = "Danh sách tất cả các phim\n" + "Enter để xem thông tin chi tiết\n";
-
-            Menu menu = new Menu(menuOptions, prompts);
-
-            int selectedIndex = menu.Run();
-
-            // Xử lý khi người dùng đã chọn một bộ phim
-            if (selectedIndex >= 0 && selectedIndex < movieOptions.Count)
-            {
-                ShowMovieDetails(lines[selectedIndex]);
-            }
-        }
-
-        static void ShowMovieDetails(string movieData) // Sửa
+        public static void ShowMovieDetails(string movieData) // Sửa
         {
             // Xử lý và hiển thị thông tin chi tiết của bộ phim
             string[] movieInfo = movieData.Split(',');
@@ -166,18 +84,29 @@ namespace Admin
             }
         }
 
-        static void Print_Prompts(string label, string value)
+        static void Print_Prompts(string label, string value) // -
         {
-            int t1 = (Console.WindowWidth - 60) / 2;
+            int x = 57;
+            int y = 58;
+            int leftMargin = 2; // Độ lệch bên trái
+            Console.Write("╔");
+            Console.Write(new string('═', x)); // 58 là chiều rộng còn lại
+            Console.WriteLine("╗");
 
-            Console.SetCursorPosition(t1, Console.CursorTop);
             Console.Write("║");
-            Console.SetCursorPosition(t1 + 6, Console.CursorTop);
+            Console.SetCursorPosition(leftMargin, Console.CursorTop);
             Console.Write($"{label} {value}");
-            Console.SetCursorPosition(t1 + 59, Console.CursorTop);
+            int totalWidth = y; // Tổng chiều rộng
+            int rightMargin = totalWidth - leftMargin - label.Length - value.Length;
+            Console.SetCursorPosition(leftMargin + label.Length + value.Length + rightMargin, Console.CursorTop);
             Console.WriteLine("║");
+
+            Console.Write("╚");
+            Console.Write(new string('═', x)); // 58 là chiều rộng còn lại
+            Console.WriteLine("╝");
         }
-        static void EditMovie(int filmid)
+        
+        public static void EditMovie(int filmid)
         {
             string[] lines = File.ReadAllLines(dataFilePath, Encoding.Unicode);
             bool found = false;
@@ -213,12 +142,12 @@ namespace Admin
                         double rating;
 
                         // Nhập thông tin mới với các hàm Print_Prompts
-                        tenphim = Check_Nhapvao.Themdulieu_string("Tên phim: "); 
-                        theloai = Check_Nhapvao.Themdulieu_string("Thể loại: "); 
-                        nhasanxuat = Check_Nhapvao.Themdulieu_string("Nhà sản xuất: "); 
-                        sotap = Check_Nhapvao.Themdulieu_int("Số tập: "); 
-                        luotxem = Check_Nhapvao.Themdulieu_int("Lượt xem: "); 
-                        doanhthu = Check_Nhapvao.Themdulieu_int("Doanh thu: "); 
+                        tenphim = Check_Nhapvao.Themdulieu_string("Tên phim: ");
+                        theloai = Check_Nhapvao.Themdulieu_string("Thể loại: ");
+                        nhasanxuat = Check_Nhapvao.Themdulieu_string("Nhà sản xuất: ");
+                        sotap = Check_Nhapvao.Themdulieu_int("Số tập: ");
+                        luotxem = Check_Nhapvao.Themdulieu_int("Lượt xem: ");
+                        doanhthu = Check_Nhapvao.Themdulieu_int("Doanh thu: ");
                         rating = Check_Nhapvao.DoubleInputWithPrompt("Rating: ");
 
                         // Tạo thông tin phim mới
