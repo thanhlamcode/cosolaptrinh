@@ -1,0 +1,15 @@
+1,Hiệp sĩ nhí,Thiếu nhi,Nhi đồng,23,50,100,7
+2,Dragon Ball,Action,Toto,900,9998,2983,6.8125
+3,Titanic,Lãng mạn,Paramount Pictures,3,300,1200000,7.66666666666667
+4,Jurassic Park,Phiêu lưu,Universal Pictures,2,180,900000,4.4
+5,Pulp Fiction,Tội phạm,Miramax Films,2,120,600000,4.8
+6,The Matrix,Khoa học viễn tưởng,Warner Bros,2,170,850000,8
+7,Forest Gump,Drama,Paramount Pictures,2,220,1100000,8
+8,Interstellar,Khoa học viễn tưởng,Warner Bros,3,250,1200000,4.8
+9,Avatar,Khoa học viễn tưởng,20th Century Fox,3,280,1400000,4.9
+10,Gladiator,Hành động,DreamWorks,2,160,800000,4.7
+11,Dragon Ball Z,Hành động,Toei Animation,291,1000,5000000,4.8
+12,One Piece,Hành động,Toei Animation,1040,1500,8000000,4.9
+13,Naruto,Hành động,Pierrot,220,800,4000000,4.7
+14,Attack on Titan,Hành động,Wit Studio,75,600,3000000,7
+15,Fullmetal Alchemist:Brotherhood,Phiêu lưu,Bones,64,500,2500000,4.9
