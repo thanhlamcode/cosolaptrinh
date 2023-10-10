@@ -2,10 +2,7 @@
   "ExpandedNodes": [
     "",
     "\\Cinescore",
-    "\\Cinescore\\Cinescore",
-    "\\Cinescore\\Cinescore\\Admin",
-    "\\Cinescore\\Cinescore\\Outside_Interface"
+    "\\Cinescore\\Cinescore"
   ],
-  "SelectedNode": "\\Cinescore\\Cinescore.sln",
   "PreviewInSolutionExplorer": false
 }
