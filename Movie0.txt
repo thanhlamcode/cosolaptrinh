@@ -1,15 +1,16 @@
-1,Hiệp sĩ nhí,Thiếu nhi,Nhi đồng,23,50,100,7
-2,Dragon Ball,Action,Toto,900,9998,2983,6.8125
-3,Titanic,Lãng mạn,Paramount Pictures,3,300,1200000,7.66666666666667
-4,Jurassic Park,Phiêu lưu,Universal Pictures,2,180,900000,4.4
-5,Pulp Fiction,Tội phạm,Miramax Films,2,120,600000,4.8
-6,The Matrix,Khoa học viễn tưởng,Warner Bros,2,170,850000,8
-7,Forest Gump,Drama,Paramount Pictures,2,220,1100000,8
-8,Interstellar,Khoa học viễn tưởng,Warner Bros,3,250,1200000,4.8
-9,Avatar,Khoa học viễn tưởng,20th Century Fox,3,280,1400000,4.9
-10,Gladiator,Hành động,DreamWorks,2,160,800000,4.7
-11,Dragon Ball Z,Hành động,Toei Animation,291,1000,5000000,4.8
-12,One Piece,Hành động,Toei Animation,1040,1500,8000000,4.9
-13,Naruto,Hành động,Pierrot,220,800,4000000,4.7
-14,Attack on Titan,Hành động,Wit Studio,75,600,3000000,7
-15,Fullmetal Alchemist:Brotherhood,Phiêu lưu,Bones,64,500,2500000,4.9
+1, Spider-Man: Homecoming, Peter Parker phải cân nhắc cuộc sống ở trường và vai trò siêu anh hùng của mình, Hành động, Marvel Studios, 1000000, 8.5
+2, Wedding Day Kidnapping, Cuộc bắt cóc ngày đám cưới biến thành một cuộc đua đầy hài hước, Hài hước, Universal, 750000, 7.2
+3, The Haunted House, Một câu chuyện kỳ bí về một ngôi nhà cổ độc đáo và đáng sợ, Kinh dị, Paramount Pictures, 500000, 6.8
+4, Speed Race, Cuộc đua tốc độ quyết định sự sống còn, Hành động, Warner Bros., 900000, 7.9
+5, Indiana Jones Adventures, Giáo sư Indiana Jones lên đường tìm kiếm các hiện vật quý báu, Phiêu lưu, Lucasfilm, 850000, 8.0
+6, Today and Tomorrow, Một câu chuyện tình yêu đẹp giữa hai người trẻ, Lãng mạn, Focus Features, 600000, 7.5
+7, Star Wars Battle, Các hệ thống hành tinh xung đột với sự xuất hiện của các Jedi, Khoa học viễn tưởng, Lucasfilm, 1200000, 8.7
+8, Superhero Trio, Iron Man, Thor và Captain America hợp sức chống lại một đối thủ đáng gờm, Hành động, Marvel Studios, 1100000, 8.4
+9, Into the Virtual World, Một chàng trai bị cuốn vào một thế giới ảo đầy phiêu lưu và hiểm nguy, Khoa học viễn tưởng, Sony Pictures, 850000, 7.8
+10, Enigmatic Land, Một cuộc phiêu lưu trong một vùng đất kỳ lạ với nhiều bí mật ẩn sau, Phiêu lưu, Paramount Pictures, 700000, 7.1
+11, The Great Escape, Một nhóm tù nhân lập kế hoạch vượt ngục khỏi một nhà tù tàn khốc, Tội phạm, 20th Century Fox, 950000, 8.1
+12, Life of Pi, Chuyến hành trình của một chàng trai trẻ trên biển cùng với một con hổ, Phiêu lưu, 20th Century Fox, 800000, 7.9
+13, Dark Days, Cuộc chiến giữa ác quỷ và những người săn ác quỷ, Kinh dị, Lionsgate, 700000, 6.7
+14, A New World, Một thế giới tương lai với công nghệ cao và cuộc chiến cho quyền lực, Khoa học viễn tưởng, Netflix, 750000, 7.0
+15, Super Speed Race, Cuộc đua tốc độ đỉnh cao trên đường phố với xe hơi siêu phàm, Hành động, Universal, 1100000, 8.31,One Punch Man,Người hùng kết liễu mọi kẻ thù với duy nhất một đấm,Action-Fantasy,Madhouse,1,8.5
+16,One Punch Man,Một đấm,Action-Fantasy,Madhouse,1,8.5
