@@ -48,7 +48,7 @@ namespace Cinescore
             {
                 while(!gate_end)
                 {
-                    Search_Film.ProcessSelectedOption(ref gate_end, ac_Id);
+                    Search_Film.ProcessSelectedOption(ref gate_end, ac_Id, accountnotify);
                 }    
             }
         }

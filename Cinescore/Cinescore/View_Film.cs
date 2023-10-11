@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Admin;
 using Outside_Interface;
 
 namespace User
@@ -18,7 +19,8 @@ namespace User
             int film_max = 0;
             for(int i = 0; i < mangtam.Count; i++)
             {
-                prompts += $"Phim Id: {mangtam[i][0]} Tên Phim: {mangtam[i][1]}";
+                string F_name = Xem_Phim.Khong_Vuot_60(Convert.ToString(mangtam[i][1]));
+                prompts += $"{mangtam[i][0]} Tên Phim: {F_name}";
                 if (i + 1 < mangtam.Count) prompts += "\n";
             }    
             if (prompts.Split('\n').Length > 20) film_max = 20;
@@ -73,18 +75,23 @@ namespace User
             }
             string[] menuOptions = movieOptions.ToArray();
             string prompts = "Chọn một trong số các bộ phim dưới đây";
-            Menu menu = new Menu(menuOptions, prompts, true);
+            Menu menu = new Menu(menuOptions, prompts);
             int selectedIndex = menu.Run(ref rac);
 
             // Xử lý khi người dùng đã chọn một bộ phim
             if (selectedIndex >= 0 && selectedIndex < movieOptions.Count)
             {
-                string F_id = mangtam[selectedIndex][0];
-                string thongbao = null;
-                thongbao = $"Phim Id: {mangtam[selectedIndex][0]}\nTên Phim: {mangtam[selectedIndex][1]}\n" +
-                    $"Thể loại: {mangtam[selectedIndex][2]}\nNhà sản xuất: {mangtam[selectedIndex][3]}\n" +
-                    $"Số tập: {Convert.ToInt32(mangtam[selectedIndex][4])}\nLượt Xem: {Convert.ToInt32(mangtam[selectedIndex][5])}\n" +
-                    $"Doanh Thu: {Convert.ToInt32(mangtam[selectedIndex][6])}\nRating: {Convert.ToDouble(mangtam[selectedIndex][7])}";
+                int sele_num = selectedIndex + check_num;
+                string F_id = mangtam[sele_num][0];
+                string F_name = null;
+                string F_content = null;
+                Search_Film.Khong_Vuot_60_Xuongdong(ref F_name, Convert.ToString(mangtam[sele_num][1]));
+                Search_Film.Khong_Vuot_60_Xuongdong(ref F_content, Convert.ToString(mangtam[sele_num][2]));
+
+                string thongbao = $"Phim Id: {F_id}\nTên Phim: {F_name}\n" +
+                    $"Nội dung: {F_content}\nThể loại: {mangtam[sele_num][3]}\n" +
+                    $"Nhà sản xuất: {Convert.ToString(mangtam[sele_num][4])}\nLượt Xem: {Convert.ToInt32(mangtam[sele_num][5])}\n" +
+                    $"Rating: {Convert.ToDouble(mangtam[sele_num][6])}";
                 Menu_Film_User_D(thongbao, ac_Id, F_id);
             }
         }

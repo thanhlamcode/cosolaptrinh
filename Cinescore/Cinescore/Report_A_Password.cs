@@ -12,11 +12,11 @@ namespace User
     {
         static string File_F_Report_Password = @"C:\Users\84967\OneDrive\Máy tính\Truyvan.txt";
 
-        public static void R_And_P()
+        public static void R_And_P(int ac_Id)
         {
             List<string> dataLines = File.ReadAllLines(File_F_Report_Password).ToList();
             string[] menuOptions = { "Thêm báo cáo bình luận", "Đổi mật khẩu người dùng", "Quay lại" };
-            string prompts = "Chương trình truy vấn dữ liệu\n";
+            string prompts = "Đổi mật khẩu và Báo cáo\n";
             int rac = 0;
 
             Menu menu = new Menu(menuOptions, prompts);
@@ -31,7 +31,7 @@ namespace User
                     break;
                 case 1:
                     Console.Clear();
-                    ChangeUserPassword(dataLines);
+                    ChangeUserPassword(dataLines, ac_Id);
                     Console.ReadLine();
                     break;
                 case 2:
@@ -82,36 +82,21 @@ namespace User
             } while (true);
         }
 
-        static void ChangeUserPassword(List<string> dataLines)
+        static void ChangeUserPassword(List<string> dataLines, int ac_Id)
         {
             Console.Clear();
             Search_Film.Print_Normal("Đổi mật khẩu người dùng");
-            string username = "";
-
-            while (true)
-            {
-                Console.Write("Nhập tên người dùng (username): ");
-                username = Console.ReadLine();
-
-                // Kiểm tra xem người dùng có tồn tại trong dữliệu hay không
-                string userData = dataLines.FirstOrDefault(line => line.Contains(username));
-                if (userData != null)
-                {
-                    break;
-                }
-
-                Console.WriteLine("Tên người dùng không tồn tại. Vui lòng thử lại.");
-            }
+            string User_Id = Convert.ToString(ac_Id);
 
             Console.Write("Nhập mật khẩu cũ: ");
             string oldPassword = Console.ReadLine();
-            string passwordData = dataLines.FirstOrDefault(line => line.Contains(username) && line.Contains(oldPassword));
+            string passwordData = dataLines.FirstOrDefault(line => line.Contains(User_Id) && line.Contains(oldPassword));
             while (passwordData == null)
             {
                 Console.WriteLine("Mật khẩu cũ không chính xác. Vui lòng thử lại.");
                 Console.Write("Nhập mật khẩu cũ: ");
                 oldPassword = Console.ReadLine();
-                passwordData = dataLines.FirstOrDefault(line => line.Contains(username) && line.Contains(oldPassword));
+                passwordData = dataLines.FirstOrDefault(line => line.Contains(User_Id) && line.Contains(oldPassword));
             }
 
             Console.Write("Nhập mật khẩu mới: ");
@@ -120,7 +105,7 @@ namespace User
             // Cập nhật mật khẩu mới trong dữ liệu
             for (int i = 0; i < dataLines.Count; i++)
             {
-                if (dataLines[i].Contains(username) && dataLines[i].Contains(oldPassword))
+                if (dataLines[i].Contains(User_Id) && dataLines[i].Contains(oldPassword))
                 {
                     string[] userDataParts = dataLines[i].Split(',');
                     userDataParts[2] = newPassword;
@@ -132,7 +117,6 @@ namespace User
             // Ghi lại dữ liệu vào tệp
             File.WriteAllLines(File_F_Report_Password, dataLines);
             Console.WriteLine("Đổi mật khẩu thành công.");
-            Search_Film.Print_Normal($"Tên người dùng: {username}\nMật khẩu mới: {newPassword}");
         }
     }
 }

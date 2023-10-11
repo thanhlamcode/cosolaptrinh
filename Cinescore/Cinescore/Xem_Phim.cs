@@ -5,16 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Outside_Interface;
+using User;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Admin
 {
     internal class Xem_Phim
     {
-        static string dataFilePath = @"C:\Users\84967\OneDrive\Máy tính\data.txt";
+        static string dataFilePath = @"C:\Users\84967\OneDrive\Máy tính\Movie0.txt";
 
         public static void DisplayAllMovieNames(int edit_num = 0)
         {
-            string[] lines = File.ReadAllLines(dataFilePath, Encoding.Unicode);
+            string[] lines = File.ReadAllLines(dataFilePath);
             List<List<string>> mangtam = new List<List<string>>();
             string prompts = null;
             bool display_movie = false;
@@ -28,9 +30,9 @@ namespace Admin
                 if (movieData.Length > 0)
                 {
                     string filmId = movieData[0];
-                    string movieName = movieData[1];
+                    string movieName = Khong_Vuot_60(Convert.ToString(movieData[1]));
                     mangtam.Add(m_1);
-                    prompts += $"{filmId}: {movieName}";
+                    prompts += $"{filmId}- Tên Phim: {movieName}";
                     if (i + 1 < lines.Length) prompts += "\n";
                 }
             }
@@ -65,8 +67,6 @@ namespace Admin
                         break;
                     case 2:
                         Ham_moi(mangtam, prompts, film_max, edit_num);
-                        Console.ReadLine();
-                        mangtam.Clear();
                         break;
                     case 3:
                         display_movie = true;
@@ -90,23 +90,51 @@ namespace Admin
             }
             string[] menuOptions = movieOptions.ToArray();
             string prompts = "Chọn một trong số các bộ phim dưới đây";
-            Menu menu = new Menu(menuOptions, prompts, true);
+            Menu menu = new Menu(menuOptions, prompts);
             int selectedIndex = menu.Run(ref rac);
 
             // Xử lý khi người dùng đã chọn một bộ phim
-            if (selectedIndex >= 0 && selectedIndex < movieOptions.Count)
+            if (selectedIndex >= 0 && selectedIndex < movieOptions.Count) 
             {
-                string thongbao = null;
-                int F_id = Convert.ToInt32(mangtam[selectedIndex][0]);
-                thongbao = $"Phim Id: {mangtam[selectedIndex][0]}\nTên Phim: {mangtam[selectedIndex][1]}\n" +
-                    $"Thể loại: {mangtam[selectedIndex][2]}\nNhà sản xuất: {mangtam[selectedIndex][3]}\n" +
-                    $"Số tập: {Convert.ToInt32(mangtam[selectedIndex][4])}\nLượt Xem: {Convert.ToInt32(mangtam[selectedIndex][5])}\n" +
-                    $"Doanh Thu: {Convert.ToInt32(mangtam[selectedIndex][6])}\nRating: {Convert.ToDouble(mangtam[selectedIndex][7])}";
+                int sele_num = selectedIndex + check_num;
+                int F_id = Convert.ToInt32(mangtam[sele_num][0]);
+                string F_name = Convert.ToString(mangtam[sele_num][1]);
 
-                if (edit_num == 0) Admin_Interface.ShowMovieDetails(thongbao);
+                string thongbao = $"Phim Id: {F_id}\nTên Phim: {F_name}\n" +
+                    $"Nội dung: {mangtam[sele_num][2]}\nThể loại: {mangtam[sele_num][3]}\n" +
+                    $"Nhà sản xuất: {Convert.ToString(mangtam[sele_num][4])}\nLượt Xem: {Convert.ToInt32(mangtam[sele_num][5])}\n" +
+                    $"Rating: {Convert.ToDouble(mangtam[sele_num][6])}";
+
+                if (edit_num == 0) Search_Film.Print_Normal(thongbao);
                 else Admin_Interface.EditMovie(F_id, thongbao, mangtam[selectedIndex]);
                 Console.ReadLine();
             }
+        }
+
+        public static string Khong_Vuot_60(string moviedata)
+        {
+            int col = 0;
+            string prompt = null;
+            if(moviedata.Length >= 60)
+            {
+                string[] text = moviedata.Split(' ');
+                for (int i = 0; i < text.Length; i++)
+                {
+                    if (col + text[i].Length <= 60)
+                    {
+                        string alpha1 = text[i] + " ";
+                        prompt += alpha1;
+                        col += alpha1.Length;
+                    }
+                    else break;
+                }    
+            }    
+            else
+            {
+                prompt = moviedata;
+            }
+
+            return prompt;
         }
     }
 }

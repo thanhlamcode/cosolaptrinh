@@ -18,7 +18,7 @@ namespace Outside_Interface
                 at1 = Console.ReadLine();
                 // Kiểm tra xem liệu user có nhập vào gì không hay là chỉ nhập khoảng trắng
                 // Nếu đúng như điều trên thì đưa đến else bắt nhập lại không thì trả về giá trị kiểu string
-                if (!string.IsNullOrEmpty(at1) && !string.IsNullOrWhiteSpace(at1))
+                if (!string.IsNullOrEmpty(at1) && !string.IsNullOrWhiteSpace(at1) && !at1.Contains(','))
                 {
                     return at1;
                 }

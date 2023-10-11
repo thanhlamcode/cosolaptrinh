@@ -12,11 +12,11 @@ namespace User
     {
         static string filePath = @"C:\Users\84967\OneDrive\Máy tính\Movie0.txt"; 
 
-        public static void ProcessSelectedOption(ref bool gate_end, int ac_Id)
+        public static void ProcessSelectedOption(ref bool gate_end, int ac_Id, string accountnotify)
         {
             string[] menuOptions = { "Tìm phim theo tên", "Tìm phim theo thể loại", 
                 "Top phim có rating cao nhất", "Chỉnh sửa bình luận","Đổi mật khẩu và báo cáo", "Thoát" };
-            string prompts = "Chọn tùy chọn tìm kiếm";
+            string prompts = accountnotify + "\nGIAO DIỆN USER";
             int rac = 0;
             List<List<string>> mangtam = new List<List<string>>();
 
@@ -58,7 +58,7 @@ namespace User
                     For_User_Comment.EditReview(cmtid);
                     break;
                 case 4:
-                    Report_A_Password.R_And_P();
+                    Report_A_Password.R_And_P(ac_Id);
                     break;
                 case 5:
                     gate_end = true;
@@ -79,7 +79,7 @@ namespace User
                     string[] movieData = line.Split(',');
                     List<string> m_1 = new List<string>(movieData);
                     string tenPhim = movieData[1];
-                    string theLoai = movieData[2];
+                    string theLoai = movieData[3];
 
                     if (tenPhim.IndexOf(searchTerm, StringComparison.OrdinalIgnoreCase) >= 0 && columnName == "tenphim")
                     {
@@ -134,25 +134,60 @@ namespace User
         public static void Print_Normal(string text)
         {
             int max = 0;
-            for (int i = 0; i < text.Split('\n').Length; i++)
+            string[] prompt = text.Split('\n');
+            string fix_text = null;
+            for(int i = 0; i < prompt.Length; i++)
             {
-                if (text.Split('\n')[i].Length > max) max = text.Split('\n')[i].Length;
+                Khong_Vuot_60_Xuongdong(ref fix_text, prompt[i]);
+                if (i + 1 < prompt.Length) fix_text += "\n";
+            }    
+            for (int i = 0; i < fix_text.Split('\n').Length; i++)
+            {
+                if (fix_text.Split('\n')[i].Length > max) max = fix_text.Split('\n')[i].Length;
                 else continue;
             }
 
             Console.SetCursorPosition(0, Console.CursorTop);
             Console.WriteLine('╔' + new string('═', 10 + max) + '╗');
-            for (int i = 0; i < text.Split('\n').Length; i++)
+            for (int i = 0; i < fix_text.Split('\n').Length; i++)
             {
                 Console.SetCursorPosition(0, Console.CursorTop);
                 Console.Write("║");
                 Console.SetCursorPosition(6, Console.CursorTop);
-                Console.Write(text.Split('\n')[i]);
+                Console.Write(fix_text.Split('\n')[i]);
                 Console.SetCursorPosition(11 + max, Console.CursorTop);
                 Console.WriteLine("║");
             }
             Console.SetCursorPosition(0, Console.CursorTop);
             Console.WriteLine('╚' + new string('═', 10 + max) + '╝');
+        }
+
+        public static void Khong_Vuot_60_Xuongdong(ref string fix_text, string prompt)
+        {
+            int col = 0;
+            if (col + prompt.Length >= 60)
+            {
+                string[] check_text = prompt.Split(' ');
+                for (int j = 0; j < check_text.Length; j++)
+                {
+                    if (col + check_text[j].Length <= 60)
+                    {
+                        string alpha1 = check_text[j] + " ";
+                        fix_text += alpha1;
+                        col += alpha1.Length;
+
+                    }
+                    else
+                    {
+                        fix_text += "\n" + check_text[j] + " ";
+                        col = check_text[j].Length + 1;
+                    }
+                }
+            }
+            else
+            {
+                fix_text += prompt;
+            }   
         }
     }
 }
