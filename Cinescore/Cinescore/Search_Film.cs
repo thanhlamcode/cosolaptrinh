@@ -31,9 +31,11 @@ namespace User
                     Console.Write("Nhập tên phim: ");
                     string searchTermName = Console.ReadLine();
                     SearchMovies(filePath, "tenphim", searchTermName, mangtam);
-                    View_Film.User_Hienthi_Film(mangtam, ac_Id);
-                    Console.ReadLine();
-                    mangtam.Clear();
+                    if (mangtam.Count != 0) 
+                    {
+                        View_Film.User_Hienthi_Film(mangtam, ac_Id);
+                        mangtam.Clear();
+                    }
                     break;
                 case 1:
                     // Xử lý tùy chọn 2
@@ -41,15 +43,20 @@ namespace User
                     Console.Write("Nhập thể loại phim: ");
                     string searchTermGenre = Console.ReadLine();
                     SearchMovies(filePath, "theloai", searchTermGenre, mangtam);
-                    View_Film.User_Hienthi_Film(mangtam, ac_Id);
-                    Console.ReadLine();
-                    mangtam.Clear();
+                    if (mangtam.Count != 0)
+                    {
+                        View_Film.User_Hienthi_Film(mangtam, ac_Id);
+                        mangtam.Clear();
+                    }
                     break;
                 case 2:
                     Console.Clear();
                     SearchMovies(filePath, "rating", "DESC", 10, mangtam);
-                    View_Film.User_Hienthi_Film(mangtam, ac_Id);
-                    Console.ReadLine();
+                    if (mangtam.Count != 0)
+                    {
+                        View_Film.User_Hienthi_Film(mangtam, ac_Id);
+                        mangtam.Clear();
+                    }
                     break;
                 case 3:
                     Console.Clear();
@@ -96,11 +103,18 @@ namespace User
                 if (dem != 1)
                 {
                     Console.WriteLine("Không tìm thấy phim phù hợp.");
+                    Console.ReadLine();
                 }
+            }
+            catch (FileNotFoundException)
+            {
+                Console.WriteLine("File không tồn tại.");
+                Console.ReadLine();
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Đã xảy ra lỗi: {ex.Message}");
+                Console.WriteLine($"Error Search_Film.SearchMovies_1: {ex.Message}");
+                Console.ReadLine();
             }
         }
 
@@ -124,70 +138,115 @@ namespace User
                 if (!check)
                 {
                     Console.WriteLine("Không tìm thấy phim phù hợp.");
+                    Console.ReadLine();
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Đã xảy ra lỗi: {ex.Message}");
+                Console.WriteLine($"Error Search_Film.SearchMovies_2: {ex.Message}");
+                Console.ReadLine();
             }
         }
         public static void Print_Normal(string text)
         {
-            int max = 0;
-            string[] prompt = text.Split('\n');
-            string fix_text = null;
-            for(int i = 0; i < prompt.Length; i++)
+            try
             {
-                Khong_Vuot_60_Xuongdong(ref fix_text, prompt[i]);
-                if (i + 1 < prompt.Length) fix_text += "\n";
-            }    
-            for (int i = 0; i < fix_text.Split('\n').Length; i++)
-            {
-                if (fix_text.Split('\n')[i].Length > max) max = fix_text.Split('\n')[i].Length;
-                else continue;
-            }
+                int max = 0;
+                string[] prompt = text.Split('\n');
+                string fix_text = null;
+                for (int i = 0; i < prompt.Length; i++)
+                {
+                    Khong_Vuot_60_Xuongdong(ref fix_text, prompt[i]);
+                    if (i + 1 < prompt.Length) fix_text += "\n";
+                }
+                for (int i = 0; i < fix_text.Split('\n').Length; i++)
+                {
+                    if (fix_text.Split('\n')[i].Length > max) max = fix_text.Split('\n')[i].Length;
+                    else continue;
+                }
 
-            Console.SetCursorPosition(0, Console.CursorTop);
-            Console.WriteLine('╔' + new string('═', 10 + max) + '╗');
-            for (int i = 0; i < fix_text.Split('\n').Length; i++)
-            {
                 Console.SetCursorPosition(0, Console.CursorTop);
-                Console.Write("║");
-                Console.SetCursorPosition(6, Console.CursorTop);
-                Console.Write(fix_text.Split('\n')[i]);
-                Console.SetCursorPosition(11 + max, Console.CursorTop);
-                Console.WriteLine("║");
+                Console.WriteLine('╔' + new string('═', 10 + max) + '╗');
+                for (int i = 0; i < fix_text.Split('\n').Length; i++)
+                {
+                    Console.SetCursorPosition(0, Console.CursorTop);
+                    Console.Write("║");
+                    Console.SetCursorPosition(6, Console.CursorTop);
+                    Console.Write(fix_text.Split('\n')[i]);
+                    Console.SetCursorPosition(11 + max, Console.CursorTop);
+                    Console.WriteLine("║");
+                }
+                Console.SetCursorPosition(0, Console.CursorTop);
+                Console.WriteLine('╚' + new string('═', 10 + max) + '╝');
             }
-            Console.SetCursorPosition(0, Console.CursorTop);
-            Console.WriteLine('╚' + new string('═', 10 + max) + '╝');
+            catch(Exception h)
+            {
+                Console.WriteLine($"Error Search_Film.Print_Normal: {h.Message}");
+                Console.ReadLine();
+            }
         }
 
         public static void Khong_Vuot_60_Xuongdong(ref string fix_text, string prompt)
         {
-            int col = 0;
-            if (col + prompt.Length >= 60)
+            try
             {
-                string[] check_text = prompt.Split(' ');
-                for (int j = 0; j < check_text.Length; j++)
+                int col = 0;
+                if (col + prompt.Length >= 60)
                 {
-                    if (col + check_text[j].Length <= 60)
+                    string[] check_text = prompt.Split(' ');
+                    for (int j = 0; j < check_text.Length; j++)
                     {
-                        string alpha1 = check_text[j] + " ";
-                        fix_text += alpha1;
-                        col += alpha1.Length;
+                        if (col + check_text[j].Length <= 60)
+                        {
+                            fix_text += check_text[j];
+                            col += check_text[j].Length;
+                        }
+                        else
+                        {
+                            fix_text += "\n" + check_text[j];
+                            col = check_text[j].Length + 1;
+                        }
 
-                    }
-                    else
-                    {
-                        fix_text += "\n" + check_text[j] + " ";
-                        col = check_text[j].Length + 1;
+                        if (j + 1 < check_text.Length) fix_text += " ";
                     }
                 }
+                else
+                {
+                    fix_text += prompt;
+                }
             }
-            else
+            catch (Exception y)
             {
-                fix_text += prompt;
-            }   
+                Console.WriteLine($"Error Search_Film.Khong_Vuot_60_Xuongdong: {y.Message}");
+                Console.ReadLine();
+            }
+        }
+
+        public static void Update_Luotxem(string F_id, List<List<string>> mangtam, int sele_num)
+        {
+            try
+            {
+                string[] lines = File.ReadAllLines(filePath);
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    string[] movieInfo = lines[i].Split(',');
+                    if (movieInfo.Length >= 2 && movieInfo[0] == F_id)
+                    {
+                        int views = int.Parse(movieInfo[5].Trim()) + 1; // Tăng số lượt xem
+                        movieInfo[5] = views.ToString(); // Cập nhật số lượt xem trong mảng dữ liệu
+                        mangtam[sele_num][5] = views.ToString();
+                        lines[i] = string.Join(",", movieInfo); // Cập nhật dòng dữ liệu trong mảng lines
+                        break;
+                    }
+                }
+                // Ghi dữ liệu đã được cập nhật trở lại vào file Movie0.txt
+                File.WriteAllLines(filePath, lines);
+            }
+            catch(Exception x)
+            {
+                Console.WriteLine($"Error Search_Film.Udpate_Luotxem: {x.Message}");
+                Console.ReadLine();
+            }
         }
     }
 }

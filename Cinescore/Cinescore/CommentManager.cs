@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Outside_Interface;
+using User;
 
 namespace Admin
 {
@@ -17,25 +18,30 @@ namespace Admin
             // UIHelper thành Menu lựa chọn, Hiển thị danh sách cmtid, Xoá comment theo Account ID, Thoát 
             string[] options_4 = { "Hiển thị tất cả các Comment", "Xóa comment dựa trên User ID", "Quay lại" };
             string prompts = "Quản Lý Comment của User ID";
+            bool stop_flag = false;
             int rac = 0;
-            Menu menu = new Menu(options_4, prompts);
-            int choice = menu.Run(ref rac);
 
-            switch (choice)
+            while(!stop_flag)
             {
-                case 0:
-                    Console.Clear();
-                    DisplayAllComments();
-                    break;
+                Menu menu = new Menu(options_4, prompts);
+                int choice = menu.Run(ref rac);
+                switch (choice)
+                {
+                    case 0:
+                        Console.Clear();
+                        DisplayAllComments();
+                        break;
 
-                case 1:
-                    Console.Clear();
-                    DeleteCommentByAccountId();
-                    break;
+                    case 1:
+                        Console.Clear();
+                        DeleteCommentByAccountId();
+                        break;
 
-                case 2:
-                    break;
-            }
+                    case 2:
+                        stop_flag = true;
+                        break;
+                }
+            }    
         }
 
         public static void DeleteCommentByAccountId()
@@ -47,8 +53,8 @@ namespace Admin
                 string[] lines = File.ReadAllLines(dataFilePath);
 
                 bool found = false;
-
-                Console.WriteLine($"Danh sách tất cả các comments của Account ID {accountId}:");
+                Console.Clear();
+                Console.WriteLine($"Danh sách tất cả các comments của Account ID {accountId}:\n");
 
                 foreach (string line in lines)
                 {
@@ -64,7 +70,7 @@ namespace Admin
                             int filmId = int.Parse(parts[1]);
                             string comment = parts[3];
 
-                            Console.WriteLine($"CMT ID: {cmtId}, Film ID: {filmId}, Comment: {comment}");
+                            Search_Film.Print_Normal($"CMT ID: {cmtId}, Film ID: {filmId}, Comment: {comment}");
                             found = true;
                         }
                     }
@@ -78,7 +84,7 @@ namespace Admin
                 {
                     // Đếm số lần comment của Account ID
                     int commentCount = CountCommentsByAccountId(accountId);
-                    Console.WriteLine($"Số lần comment của Account ID {accountId}: {commentCount}");
+                    Console.WriteLine($"\nSố lần comment của Account ID {accountId}: {commentCount}\n");
 
                     Console.Write("Nhập Comment ID để xoá (hoặc Enter để bỏ qua): ");
                     if (int.TryParse(Console.ReadLine(), out int commentIdToDelete))
@@ -96,6 +102,7 @@ namespace Admin
             {
                 Console.WriteLine("Vui lòng nhập một số nguyên cho Account ID.");
             }
+            Console.ReadLine();
         }
 
         public static void DeleteCommentByCommentId(int commentId, int accountId)
@@ -218,9 +225,10 @@ namespace Admin
                     int accountId = int.Parse(parts[2]);
                     string cmt = parts[3];
 
-                    Console.WriteLine($"CMT ID: {cmtid}, Film ID: {filmid}, Account ID: {accountId}, Comment: {cmt}");
+                    Search_Film.Print_Normal($"CMT ID: {cmtid}, Film ID: {filmid}, Account ID: {accountId}, Comment: {cmt}");
                 }
             }
+            Console.ReadLine();
         }
     }
 }

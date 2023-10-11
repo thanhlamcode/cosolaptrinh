@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -32,7 +33,7 @@ namespace Admin
                     string filmId = movieData[0];
                     string movieName = Khong_Vuot_60(Convert.ToString(movieData[1]));
                     mangtam.Add(m_1);
-                    prompts += $"{filmId}- Tên Phim: {movieName}";
+                    prompts += $"{i + 1}. Tên Phim: {movieName}";
                     if (i + 1 < lines.Length) prompts += "\n";
                 }
             }
@@ -100,7 +101,7 @@ namespace Admin
                 int F_id = Convert.ToInt32(mangtam[sele_num][0]);
                 string F_name = Convert.ToString(mangtam[sele_num][1]);
 
-                string thongbao = $"Phim Id: {F_id}\nTên Phim: {F_name}\n" +
+                string thongbao = $"Tên Phim: {F_name}\n" +
                     $"Nội dung: {mangtam[sele_num][2]}\nThể loại: {mangtam[sele_num][3]}\n" +
                     $"Nhà sản xuất: {Convert.ToString(mangtam[sele_num][4])}\nLượt Xem: {Convert.ToInt32(mangtam[sele_num][5])}\n" +
                     $"Rating: {Convert.ToDouble(mangtam[sele_num][6])}";
@@ -122,11 +123,12 @@ namespace Admin
                 {
                     if (col + text[i].Length <= 60)
                     {
-                        string alpha1 = text[i] + " ";
-                        prompt += alpha1;
-                        col += alpha1.Length;
+                        prompt += text[i];
+                        col += text[i].Length;
                     }
                     else break;
+
+                    if (i + 1 < text[i].Length) prompt += " ";
                 }    
             }    
             else

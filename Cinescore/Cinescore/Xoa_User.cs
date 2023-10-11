@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,6 +10,7 @@ namespace Outside_Interface
 {
     internal class Xoa_User
     {
+        static string filePath1 = @"C:\Users\84967\OneDrive\Máy tính\danhsachcmtid.txt";
         public static void Bin(string filepath, string accountnotify, ref bool gate_end)
         {
             List<List<string>> database = new List<List<string>>();
@@ -125,6 +127,7 @@ namespace Outside_Interface
                     {
                         text = $"{Mangbin[i][1]} - AccountId: {Mangbin[i][0]}";
                         text += b != 0 ? $" - {text2}: {Mangbin[i][b]}" : " ";
+                        Loc_User_vComment(Mangbin[i][0]);
                         Console.WriteLine(text);
                     }
                     break;
@@ -138,6 +141,29 @@ namespace Outside_Interface
                     Mangtam.Clear();
                     Mangbin.Clear();
                 }
+            }
+        }
+
+        private static void Loc_User_vComment(string account_ID)
+        {
+            try
+            {
+                List<List<string>> db_1 = Giao_dien_ngoai.Read_File(filePath1);
+                List<List<string>> db_u = new List<List<string>>();
+                for (int i = 0; i < db_1.Count; i++)
+                {
+                    string line = db_1[i][2];
+                    if (line != account_ID)
+                    {
+                        db_u.Add(db_1[i]);
+                    }
+                }
+                Giao_dien_ngoai.Print_Loop_File(db_u, filePath1);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error Loc_User_vComment: {e.Message}");
+                Console.ReadLine();
             }
         }
     }

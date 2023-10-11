@@ -37,11 +37,9 @@ namespace Admin
                 case 2:
                     Console.Clear();
                     AddNewMovie();
-                    Console.ReadLine();
                     break;
                 case 3:
                     CommentManager.Comment_Control();
-                    Console.ReadLine();
                     break;
                 case 4:
                     // lọc rác
@@ -133,6 +131,7 @@ namespace Admin
             Console.WriteLine("Phim mới đã được thêm thành công.");
             Search_Film.Print_Normal(notif_1);
             Console.WriteLine("Đây là thông tin của bộ phim bạn vừa thêm!");
+            Console.ReadLine();
         }
         static int GetNextFilmId()
         {

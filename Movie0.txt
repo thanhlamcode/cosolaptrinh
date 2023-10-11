@@ -1,0 +1,15 @@
+1, Spider-Man: Homecoming, Peter Parker phải cân nhắc cuộc sống ở trường và vai trò siêu anh hùng của mình, Hành động, Marvel Studios,1000001, 8.5
+2, Wedding Day Kidnapping, Cuộc bắt cóc ngày đám cưới biến thành một cuộc đua đầy hài hước, Hài hước, Universal, 750000, 7.2
+3, The Haunted House, Một câu chuyện kỳ bí về một ngôi nhà cổ độc đáo và đáng sợ, Kinh dị, Paramount Pictures, 500000, 6.8
+4, Speed Race, Cuộc đua tốc độ quyết định sự sống còn, Hành động, Warner Bros.,900003, 7.9
+5, Indiana Jones Adventures, Giáo sư Indiana Jones lên đường tìm kiếm các hiện vật quý báu, Phiêu lưu, Lucasfilm,850001, 8.0
+6, Today and Tomorrow, Một câu chuyện tình yêu đẹp giữa hai người trẻ, Lãng mạn, Focus Features, 600000, 7.5
+7, Star Wars Battle, Các hệ thống hành tinh xung đột với sự xuất hiện của các Jedi, Khoa học viễn tưởng, Lucasfilm, 1200000, 8.7
+8, Superhero Trio, Iron Man-Thor và Captain America hợp sức chống lại một đối thủ đáng gờm, Hành động, Marvel Studios,1100017, 8.4
+9, Into the Virtual World, Một chàng trai bị cuốn vào một thế giới ảo đầy phiêu lưu và hiểm nguy, Khoa học viễn tưởng, Sony Pictures,850001, 7.8
+10, Enigmatic Land, Một cuộc phiêu lưu trong một vùng đất kỳ lạ với nhiều bí mật ẩn sau, Phiêu lưu, Paramount Pictures, 700000, 7.1
+11, The Great Escape, Một nhóm tù nhân lập kế hoạch vượt ngục khỏi một nhà tù tàn khốc, Tội phạm, 20th Century Fox, 950000, 8.1
+12, Life of Pi, Chuyến hành trình của một chàng trai trẻ trên biển cùng với một con hổ, Phiêu lưu, 20th Century Fox, 800000, 7.9
+13, Dark Days, Cuộc chiến giữa ác quỷ và những người săn ác quỷ, Kinh dị, Lionsgate,700001, 6.7
+14, A New World, Một thế giới tương lai với công nghệ cao và cuộc chiến cho quyền lực, Khoa học viễn tưởng, Netflix,750001, 7.0
+15, Super Speed Race, Cuộc đua tốc độ đỉnh cao trên đường phố với xe hơi siêu phàm, Hành động, Universal,1100001, 8.3

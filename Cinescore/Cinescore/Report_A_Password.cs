@@ -15,8 +15,8 @@ namespace User
         public static void R_And_P(int ac_Id)
         {
             List<string> dataLines = File.ReadAllLines(File_F_Report_Password).ToList();
-            string[] menuOptions = { "Thêm báo cáo bình luận", "Đổi mật khẩu người dùng", "Quay lại" };
-            string prompts = "Đổi mật khẩu và Báo cáo\n";
+            string[] menuOptions = { "Báo cáo", "Đổi mật khẩu người dùng", "Quay lại" };
+            string prompts = "Đổi mật khẩu và Báo cáo";
             int rac = 0;
 
             Menu menu = new Menu(menuOptions, prompts);
@@ -27,12 +27,10 @@ namespace User
                 case 0:
                     Console.Clear();
                     AddCommentReport(dataLines);
-                    Console.ReadLine();
                     break;
                 case 1:
                     Console.Clear();
-                    ChangeUserPassword(dataLines, ac_Id);
-                    Console.ReadLine();
+                    ChangeUserPassword(dataLines, ac_Id);       
                     break;
                 case 2:
                     break;
@@ -52,7 +50,7 @@ namespace User
 
                 // Kiểm tra xem người dùng có tồn tại trong dữ liệu hay không
                 string userData = dataLines.FirstOrDefault(line => line.Contains(username));
-                if (userData != null)
+                if (GetValidReport(dataLines, username))
                 {
                     // Lấy số lần báo cáo hiện tại của người dùng
                     int reportTime = int.Parse(userData.Split(',')[4].Trim());
@@ -75,11 +73,12 @@ namespace User
                     File.WriteAllLines(File_F_Report_Password, dataLines);
 
                     Console.WriteLine("Báo cáo bình luận thành công.");
+                    Console.ReadLine();
                     return;
                 }
 
                 Console.WriteLine("Người dùng không tồn tại. Vui lòng thử lại.");
-            } while (true);
+            } while (true);    
         }
 
         static void ChangeUserPassword(List<string> dataLines, int ac_Id)
@@ -117,6 +116,18 @@ namespace User
             // Ghi lại dữ liệu vào tệp
             File.WriteAllLines(File_F_Report_Password, dataLines);
             Console.WriteLine("Đổi mật khẩu thành công.");
+            Console.ReadLine();
+        }
+
+        static bool GetValidReport(List<string> datalines, string username)
+        {
+            foreach (string line in datalines)
+            {
+                string[] check_data = line.Split(',');
+                if (check_data[1] == username && check_data[6] != "A") return true;
+            }
+
+            return false;
         }
     }
 }
