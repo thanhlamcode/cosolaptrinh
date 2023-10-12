@@ -48,6 +48,11 @@ namespace Outside_Interface
                 }
 
                 string text = null;
+
+                // Mục đích khi đến chọn film -> Lúc này số danh sách film_max được truyền vào = 0
+                // -> t2 là cách tính toán cộng với số dòng trong Prompts (Lưu ý Prompts này khác với Prompts có danh sách phim
+                // Nó có thể là bất cứ thông báo nào tùy thuộc vào bạn) và hai khung trên dưới.
+                // Mục đích nhằm tính số dòng sẽ in ra khung và Options -> Options lúc này chứa danh sách các film
                 int t2 = film_max + num_title;
                 Console.SetCursorPosition(0, t2);
                 Console.WriteLine('╔' + new string('═', 16 + max) + '╗');
@@ -87,13 +92,20 @@ namespace Outside_Interface
         }
 
         // In ra một tiêu đề bình thường
+        // Dù ở các hàm khác cũng có biến film_max nhưng nó đóng vai trò chủ yếu ở hàm Print_Prompt
         private void Print_Prompts(int film_max)
         {
             int max = 0;
             int start_film = 0;
             int a = 0;
+
+            // Đk bên dưới dùng để phân biệt khi nào in bình thường, khi nào thực hiện in danh sách các phim
+            // Nếu in danh sách các film thì thiết lập start_film mới
+            // Nếu in bình thường thì thiết lập film_max -> Phục vụ cho hàm for
             if (film_max > 0) start_film = film_max - 20;
             else film_max = Prompts.Split('\n').Length;
+
+            // Tìm dòng có độ dài lớn nhất, từ đó lấy đó làm chuẩn để tính toán độ dài các khung
             for (int i = start_film; i < film_max; i++)
             {
                 if (Prompts.Split('\n')[i].Length > max) max = Prompts.Split('\n')[i].Length;
@@ -113,6 +125,15 @@ namespace Outside_Interface
                 Console.WriteLine("║");
                 a++;
             }
+            // Phép tính dưới là tìm số dòng của prompts + dòng trống -> Rồi mới thực hiện in khung dưới
+            // Câu hỏi: Tại sao lại là film_max vs start_film mà không phải là Prompts.Split('\n').Length
+            // Answer: Đơn giản là khi danh sách film ở dưới 20, ta không thể thấy rõ
+            // Nếu trong trường hợp nó trên 20, cụ thể là 26 -> Tức là Prompts lúc này là 26 dòng
+            // --> Việc này sẽ làm cho việc in ra bị lỗi -> Khi này film_max sẽ là cứu cánh
+            // Khi giới hạn cho việc thiết lập nó chỉ dừng lại ở mức 20
+            // Lúc bắt đầu film_max = 20 nó sẽ in ra danh sách film từ dòng 0 đến dòng 20 -> Dù thực tế lúc đó
+            // Trong Prompts có 26 dòng -> Nếu chọn case 1 trong Xem_Phim.cs film_max = Prompts.Split('\n').Length = 26
+            // start_film = 6 -> Nó sẽ in từ dòng 6 đến dòng 26 -> Mặc dù tương tự Prompts lúc đó có 26 dòng
             Console.SetCursorPosition(0, film_max - start_film + 1);
             Console.WriteLine('╚' + new string('═', 10 + max) + '╝');
         }
