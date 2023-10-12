@@ -12,10 +12,11 @@ namespace Admin
 {
     internal class Admin_Interface
     {
-        static string dataFilePath = @"C:\Users\84967\OneDrive\Máy tính\Movie0.txt";
+        static string dataFilePath = @"Movie0.txt";
 
         public static void ProcessSelectedOption(string filepath, string accountnotify, ref bool gate_end)
         {
+            string[] lines_1 = File.ReadAllLines(dataFilePath);
             string[] menuOptions = { "Hiển thị danh sách phim", "Chỉnh sửa thông tin phim", "Thêm phim mới",
                 "Quản Lý Comment của User", "Lọc user", "Thoát" };
             string prompts = accountnotify + "\n" + "GIAO DIỆN ADMIN";
@@ -27,25 +28,44 @@ namespace Admin
             switch (selectedIndex)
             {
                 case 0:
+                    // Xem thông tin chi tiết của phim mà mình muốn
                     Console.Clear();
-                    Xem_Phim.DisplayAllMovieNames();
+                    // Điều kiện để phòng trường hợp trong file Movie0 không tồn tại dữ liệu nào
+                    // Tức là không có dữ liệu phim nào trong file Movie0
+                    if (lines_1.Length > 0) Xem_Phim.DisplayAllMovieNames();
+                    else
+                    {
+                        Console.WriteLine("Hiện không có phim nào trong đây. Vui lòng nhập thêm");
+                        Console.ReadLine();
+                    } 
+                        
                     break;
                 case 1:
+                    // Edit film
                     Console.Clear();
-                    Xem_Phim.DisplayAllMovieNames(1);
+                    if (lines_1.Length > 0) Xem_Phim.DisplayAllMovieNames(1);
+                    else
+                    {
+                        Console.WriteLine("Hiện không có phim nào trong đây. Vui lòng nhập thêm");
+                        Console.ReadLine();
+                    }
                     break;
                 case 2:
+                    // Thêm phim mới
                     Console.Clear();
                     AddNewMovie();
                     break;
                 case 3:
+                    // Đến phần điều khiển review của các user
                     CommentManager.Comment_Control();
                     break;
                 case 4:
-                    // lọc rác
+                    // Hàm xóa user
                     Xoa_User.Bin(filepath, accountnotify, ref gate_end);  
                     break;
                 case 5:
+                    // Biến bool được truyền tham chiếu khi về true sẽ dừng vòng lặp while ở Program.cs
+                    // Từ đó dừng chương trình.
                     gate_end = true;
                     break;
             }

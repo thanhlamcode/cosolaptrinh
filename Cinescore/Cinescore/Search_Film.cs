@@ -10,7 +10,7 @@ namespace User
 {
     internal class Search_Film
     {
-        static string filePath = @"C:\Users\84967\OneDrive\Máy tính\Movie0.txt"; 
+        static string filePath = @"Movie0.txt"; 
 
         public static void ProcessSelectedOption(ref bool gate_end, int ac_Id, string accountnotify)
         {

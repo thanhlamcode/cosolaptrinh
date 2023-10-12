@@ -98,9 +98,12 @@ namespace User
                 {
                     int sele_num = selectedIndex + check_num;
                     string F_id = mangtam[sele_num][0];
+                    // Cập nhập lượt xem của một bộ phim khi chọn phim đó để xem
                     Search_Film.Update_Luotxem(F_id, mangtam, sele_num);
                     string F_name = null;
                     string F_content = null;
+                    // Kiểm tra liệu tên phim và nội dung có vượt quá giới hạn chữ là 60 không 
+                    // Nếu có thì thực hiện in xuống dòng -> Tránh việc nó vượt qua WindowWidth gây ra lỗi khi cố in.
                     Search_Film.Khong_Vuot_60_Xuongdong(ref F_name, Convert.ToString(mangtam[sele_num][1]));
                     Search_Film.Khong_Vuot_60_Xuongdong(ref F_content, Convert.ToString(mangtam[sele_num][2]));
 
@@ -131,10 +134,12 @@ namespace User
                 {
                     case 0:
                         Console.Clear();
+                        // Thêm review
                         For_User_Comment.AddReview(F_id, ac_Id); ; // truyền filmid, account Id
                         break;
                     case 1:
                         Console.Clear();
+                        // Xem tất cả các review trong một bộ phim
                         For_User_Comment.ViewReview(F_id);
                         break;
                     case 2:

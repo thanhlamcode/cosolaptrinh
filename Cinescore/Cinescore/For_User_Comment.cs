@@ -10,9 +10,9 @@ namespace User
 {
     internal class For_User_Comment
     {
-        static string filePath1 = @"C:\Users\84967\OneDrive\Máy tính\danhsachcmtid.txt";
-        static string filePath2 = @"C:\Users\84967\OneDrive\Máy tính\Movie0.txt";
-        static string filePath3 = @"C:\Users\84967\OneDrive\Máy tính\Truyvan.txt";
+        static string filePath1 = @"danhsachcmtid.txt";
+        static string filePath2 = @"Movie0.txt";
+        static string filePath3 = @"Truyvan.txt";
 
         //Hàm tính điểm rating trung bình
         static void AverageRating()
@@ -263,6 +263,8 @@ namespace User
         }
 
         // Bổ sung cho hàm ViewReview
+        // Thực hiện kiểm tra nếu account Id không tồn tại thì trả về null
+        // Nếu tồn tại thì trả về tên của user dựa theo Account id của user đó
         static string Get_usern_fvr(string u_id)
         {
             List<string> ac_list = File.ReadAllLines(filePath3).ToList();

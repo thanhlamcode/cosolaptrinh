@@ -11,11 +11,13 @@ namespace Admin
 {
     internal class CommentManager
     {
-        public static string dataFilePath = @"C:\Users\84967\OneDrive\Máy tính\danhsachcmtid.txt";
+        public static string dataFilePath = @"danhsachcmtid.txt";
+        static string FilePath_2 = @"Movie0.txt";
 
         public static void Comment_Control()
         {
             // UIHelper thành Menu lựa chọn, Hiển thị danh sách cmtid, Xoá comment theo Account ID, Thoát 
+            string[] line_2 = File.ReadAllLines(FilePath_2);
             string[] options_4 = { "Hiển thị tất cả các Comment", "Xóa comment dựa trên User ID", "Quay lại" };
             string prompts = "Quản Lý Comment của User ID";
             bool stop_flag = false;
@@ -28,13 +30,27 @@ namespace Admin
                 switch (choice)
                 {
                     case 0:
+                        // Xem tất cả các review
                         Console.Clear();
-                        DisplayAllComments();
+                        // Điều kiện phòng trường hợp không có phim nào trong Movie0.txt
+                        if(line_2.Length > 0) DisplayAllComments();
+                        else
+                        {
+                            Console.WriteLine("Hiện tại không có phim. Nên không có review nào.\nVui lòng nhập phim mới");
+                            Console.ReadLine();
+                        } 
+                            
                         break;
 
                     case 1:
+                        // Xóa review dựa trên Account Id của User
                         Console.Clear();
-                        DeleteCommentByAccountId();
+                        if (line_2.Length > 0) DeleteCommentByAccountId(); 
+                        else
+                        {
+                            Console.WriteLine("Hiện tại không có phim. Nên không có review nào.\nVui lòng nhập phim mới");
+                            Console.ReadLine();
+                        }
                         break;
 
                     case 2:

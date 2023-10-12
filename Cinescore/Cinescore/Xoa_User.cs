@@ -10,7 +10,7 @@ namespace Outside_Interface
 {
     internal class Xoa_User
     {
-        static string filePath1 = @"C:\Users\84967\OneDrive\Máy tính\danhsachcmtid.txt";
+        static string filePath1 = @"danhsachcmtid.txt";
         public static void Bin(string filepath, string accountnotify, ref bool gate_end)
         {
             List<List<string>> database = new List<List<string>>();
@@ -144,6 +144,7 @@ namespace Outside_Interface
             }
         }
 
+        // Mục đích: Khi tiến hành lọc User thì tiện thể xóa lun các review mà user đó đã thực hiện
         private static void Loc_User_vComment(string account_ID)
         {
             try
@@ -152,13 +153,16 @@ namespace Outside_Interface
                 List<List<string>> db_u = new List<List<string>>();
                 for (int i = 0; i < db_1.Count; i++)
                 {
-                    string line = db_1[i][2];
-                    if (line != account_ID)
+                    string line = db_1[i][2]; // Lấy ra account id từ file danhsachcmtid.txt
+                    if (line != account_ID) // rồi check nó với tham số account_Id truyền vào
                     {
-                        db_u.Add(db_1[i]);
+                        db_u.Add(db_1[i]); // Nếu trùng thì loại nó ra khỏi mảng
+                        // Mục đích để khi dùng hàm Print_Loop_File để khi đè data từ mảng db_u vào 
+                        // file danhsachcmtid.txt thì những review của user đã bị xóa cũng sẽ mất theo
+                        // Do nó không được Add vào mảng db_u
                     }
                 }
-                Giao_dien_ngoai.Print_Loop_File(db_u, filePath1);
+                Giao_dien_ngoai.Print_Loop_File(db_u, filePath1); // Thực hiện ghi đè file từ mảng db_u vào file txt
             }
             catch (Exception e)
             {

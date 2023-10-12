@@ -25,7 +25,7 @@ namespace Cinescore
             // Giúp người dùng nhận biết Account Id, Username và Phân quyền của mình dễ dàng hơn
             string accountnotify = " ";
             int ac_Id = 0;
-            string filepath = @"C:\Users\84967\OneDrive\Máy tính\Truyvan.txt";
+            string filepath = @"Truyvan.txt";
 
             string title = Logo.Logo_App();
             Logo.Run_Intro();
@@ -38,7 +38,7 @@ namespace Cinescore
 
             if (accessauthority)
             {
-                // Phần làm admin
+                // Admin
                 while (!gate_end)
                 {
                     Admin_Interface.ProcessSelectedOption(filepath, accountnotify, ref gate_end);
@@ -46,6 +46,7 @@ namespace Cinescore
             }
             else
             {
+                // User
                 while(!gate_end)
                 {
                     Search_Film.ProcessSelectedOption(ref gate_end, ac_Id, accountnotify);

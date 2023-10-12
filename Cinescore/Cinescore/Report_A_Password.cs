@@ -10,7 +10,7 @@ namespace User
 {
     internal class Report_A_Password
     {
-        static string File_F_Report_Password = @"C:\Users\84967\OneDrive\Máy tính\Truyvan.txt";
+        static string File_F_Report_Password = @"Truyvan.txt";
 
         public static void R_And_P(int ac_Id)
         {
