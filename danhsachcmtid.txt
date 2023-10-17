@@ -1,0 +1,7 @@
+3,4,106,An exciting action-packed film,2023,10,10,10.0
+5,8,106,A must-watch movie,2023,10,9,9.4
+6,11,101,Disappointing plot and weak character development,2023,10,8,5.6
+7,2,108,Incredible cinematography,2023,10,8,9.2
+8,5,110,Beautifully shot and emotionally gripping,2023,10,7,8.4
+9,7,102,An average film with nothing special,2023,10,6,6.0
+10,9,107,A captivating and thought-provoking story,2023,10,5,9.6
