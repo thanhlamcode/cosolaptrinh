@@ -56,7 +56,6 @@ namespace Outside_Interface
         public static void Run_Intro()
         {
             string introtext = Logo_UEH();
-            string title = Logo_App();
             // biến bool dùng để dừng một task và chuyển sang task hoặc đoạn code tiếp theo
             bool flag = false;
 
@@ -154,7 +153,8 @@ namespace Outside_Interface
 
             while (!localflag) // Liên tục in ra Logo hoặc tên nhóm
             {
-                if (Console.KeyAvailable) // Nếu giá trị nhập vào là nút Enter thì chuyển sang Task tiếp theo hoặc đoạn code tiếp theo
+                if (Console.KeyAvailable) // Nếu giá trị nhập vào là nút Enter thì
+                                          // chuyển sang Task tiếp theo hoặc đoạn code tiếp theo
                 {
                     var key = Console.ReadKey(intercept: true).Key;
                     if (key == ConsoleKey.Enter)
