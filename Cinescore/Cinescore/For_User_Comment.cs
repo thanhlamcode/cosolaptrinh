@@ -15,63 +15,42 @@ namespace User
         static string filePath3 = @"Truyvan.txt";
 
         //Hàm tính điểm rating trung bình
-        static void AverageRating()
+        static void AverageRating(string filmid)
         {
             try
             {
                 List<string> reviews = File.ReadAllLines(filePath1).ToList();
+                List<string> movie_1 = File.ReadAllLines(filePath2).ToList();
 
-                // Khởi tạo một mảng lưu trữ tổng điểm và số lượng đánh giá cho mỗi phim
-                List<double> totalRatings = new List<double>();
-                List<int> numberOfRatings = new List<int>();
-
-                // Khởi tạo danh sách với các giá trị mặc định
-                for (int i = 0; i < reviews.Capacity; i++)
-                {
-                    totalRatings.Add(0.0);
-                    numberOfRatings.Add(0);
-                }
+                double rating = 0;
+                int count = 0;
 
                 foreach (string review in reviews)
                 {
                     string[] reviewData = review.Split(',');
 
-                    if (reviewData.Length == 5)
+                    if (reviewData[1] == filmid)
                     {
-                        int filmId = int.Parse(reviewData[1]);
-                        double rating = double.Parse(reviewData[7]);
-
-                        // Cập nhật tổng điểm và số lượng đánh giá cho phim tương ứng
-                        totalRatings[filmId] += rating;
-                        numberOfRatings[filmId]++;
-                    }
+                        rating += double.Parse(reviewData[7]);
+                        count++;
+                    }             
                 }
+                double vag_rating = Math.Round(rating / count, 2);
 
-                // Tính điểm rating trung bình và cập nhật vào filePath2
-                List<string> movies = File.ReadAllLines(filePath2).ToList();
-
-                for (int i = 0; i < movies.Count; i++)
+                for(int i = 0; i < movie_1.Count; i++)
                 {
-                    string[] movieData = movies[i].Split(',');
-
-                    if (movieData.Length == 8)
+                    string[] movieData = movie_1[i].Split(',');
+                    if (movieData[0] == filmid)
                     {
-                        int filmId = int.Parse(movieData[0]);
-
-                        // Tính điểm rating trung bình (nếu có đánh giá)
-                        if (numberOfRatings[filmId] > 0)
-                        {
-                            double averageRating = totalRatings[filmId] / numberOfRatings[filmId];
-                            movieData[7] = averageRating.ToString();
-
-                            // Cập nhật dữ liệu vào filePath2
-                            movies[i] = string.Join(",", movieData);
-                        }
+                        movieData[6] = Convert.ToString(vag_rating);
+                        string text = $"{movieData[0]},{movieData[1]},{movieData[2]},{movieData[3]},"+
+                            $"{movieData[4]},{movieData[5]},{movieData[6]}";
+                        movie_1[i] = text;
+                        break;
                     }
-                }
-
+                }    
                 // Ghi dữ liệu đã được cập nhật vào filePath2
-                File.WriteAllLines(filePath2, movies);
+                File.WriteAllLines(filePath2, movie_1);
             }
             catch(Exception e)
             {
@@ -85,6 +64,7 @@ namespace User
             try
             {
                 List<string> movies = File.ReadAllLines(filePath2).ToList();
+                List<string> reviews_root = File.ReadAllLines(filePath1).ToList();
 
                 string cmt = Check_Nhapvao.Themdulieu_string("Bình luận của bạn: ");
                 double rating = Check_Nhapvao.DoubleInputWithPrompt("Số điểm Rating của bạn: ", 0, 10, true);
@@ -98,13 +78,15 @@ namespace User
 
                 string review = $"{commentIdCounter},{filmid},{accountId},{cmt},{year},{month},{day},{rating}";
 
+                reviews_root.Add(review);
+
                 //ghi dữ liệu vừa thêm vào cuối tệp tin filePath1.
-                File.AppendAllText(filePath1, review + Environment.NewLine);
+                File.WriteAllLines(filePath1, reviews_root); 
 
                 Console.WriteLine("Bình luận của bạn đã được thêm thành công.");
                 Search_Film.Print_Normal($"Bình luận: {cmt}\nRating: {rating.ToString()}");
 
-                AverageRating();
+                AverageRating(filmid);
                 Console.ReadLine();
             }
             catch (Exception ex)
@@ -156,6 +138,7 @@ namespace User
             {
                 List<string> reviews = File.ReadAllLines(filePath1).ToList();
                 bool flag = false;
+                string filmid_1 = null;
 
                 for (int i = 0; i < reviews.Count; i++)
                 {
@@ -163,6 +146,7 @@ namespace User
 
                     if (int.Parse(reviewData[0]) == cmtid)
                     {
+                        filmid_1 = reviewData[1];
                         Console.WriteLine("Bình luận hiện tại:");
                         Search_Film.Print_Normal($"Bình luận: {reviewData[3]}\nRating: {reviewData[7]}");
 
@@ -181,7 +165,7 @@ namespace User
                         Search_Film.Print_Normal($"Bình luận: {cmt}\nRating: {rating.ToString()}");
 
                         //Tính lại điểm rating trung bình sau khi sửa
-                        AverageRating();
+                        AverageRating(filmid_1);
                         flag = true;
                         break;
                     }
